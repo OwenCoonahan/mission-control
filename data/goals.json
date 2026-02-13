@@ -1,0 +1,28 @@
+{
+  "goals": [
+    {
+      "id": "mind",
+      "title": "Calm Mind",
+      "emoji": "🧘",
+      "description": "Less caffeine, deep breathing, deliberate time",
+      "progress": 75,
+      "color": "violet"
+    },
+    {
+      "id": "business",
+      "title": "Grow Business",
+      "emoji": "📈",
+      "description": "Do what moves the needle. Execute the playbook.",
+      "progress": 58,
+      "color": "emerald"
+    },
+    {
+      "id": "body",
+      "title": "Greek God Body",
+      "emoji": "💪",
+      "description": "Eat and workout with discipline",
+      "progress": 68,
+      "color": "orange"
+    }
+  ]
+}

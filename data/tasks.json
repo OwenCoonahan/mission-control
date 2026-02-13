@@ -1,0 +1,136 @@
+{
+  "tasks": [
+    {
+      "id": "1",
+      "title": "OpenClaw presentation (4-5 PM)",
+      "goal": "business",
+      "status": "done",
+      "priority": "frog",
+      "dueDate": "2026-02-13",
+      "completed": true,
+      "completedAt": "2026-02-13T17:59:53.191Z",
+      "updatedAt": "2026-02-13T17:59:53.191Z"
+    },
+    {
+      "id": "2",
+      "title": "Send 5 outreach messages",
+      "goal": "business",
+      "status": "today",
+      "priority": "high",
+      "dueDate": "2026-02-13",
+      "completed": false,
+      "completedAt": null
+    },
+    {
+      "id": "3",
+      "title": "Data ingestion + PDF generation",
+      "goal": "business",
+      "status": "today",
+      "priority": "high",
+      "dueDate": "2026-02-13",
+      "completed": false,
+      "completedAt": null
+    },
+    {
+      "id": "4",
+      "title": "20 min meditation session",
+      "goal": "mind",
+      "status": "today",
+      "priority": "medium",
+      "dueDate": "2026-02-13",
+      "completed": true,
+      "completedAt": "2026-02-13T08:30:00Z"
+    },
+    {
+      "id": "5",
+      "title": "Morning workout - Push day",
+      "goal": "body",
+      "status": "today",
+      "priority": "high",
+      "dueDate": "2026-02-13",
+      "completed": true,
+      "completedAt": "2026-02-13T07:00:00Z"
+    },
+    {
+      "id": "6",
+      "title": "Landing pages + funnel design",
+      "goal": "business",
+      "status": "backlog",
+      "priority": "medium",
+      "dueDate": "2026-02-15",
+      "completed": false,
+      "completedAt": null
+    },
+    {
+      "id": "7",
+      "title": "Posts on Twitter + LinkedIn",
+      "goal": "business",
+      "status": "backlog",
+      "priority": "low",
+      "dueDate": "2026-02-14",
+      "completed": false,
+      "completedAt": null
+    },
+    {
+      "id": "8",
+      "title": "Review weekly metrics",
+      "goal": "business",
+      "status": "done",
+      "priority": "medium",
+      "dueDate": "2026-02-12",
+      "completed": true,
+      "completedAt": "2026-02-12T16:00:00Z"
+    },
+    {
+      "id": "9",
+      "title": "Journaling session",
+      "goal": "mind",
+      "status": "done",
+      "priority": "low",
+      "dueDate": "2026-02-11",
+      "completed": true,
+      "completedAt": "2026-02-11T21:00:00Z"
+    },
+    {
+      "id": "10",
+      "title": "Leg day workout",
+      "goal": "body",
+      "status": "done",
+      "priority": "high",
+      "dueDate": "2026-02-12",
+      "completed": true,
+      "completedAt": "2026-02-12T07:30:00Z"
+    },
+    {
+      "id": "11",
+      "title": "Client call prep",
+      "goal": "business",
+      "status": "done",
+      "priority": "high",
+      "dueDate": "2026-02-10",
+      "completed": true,
+      "completedAt": "2026-02-10T14:00:00Z"
+    },
+    {
+      "id": "12",
+      "title": "Deep breathing exercises",
+      "goal": "mind",
+      "status": "done",
+      "priority": "medium",
+      "dueDate": "2026-02-10",
+      "completed": true,
+      "completedAt": "2026-02-10T08:00:00Z"
+    },
+    {
+      "id": "task-1771005453574",
+      "title": "Test task from API",
+      "goal": "business",
+      "priority": "high",
+      "status": "today",
+      "dueDate": "2026-02-13",
+      "createdAt": "2026-02-13T17:57:33.574Z",
+      "updatedAt": "2026-02-13T17:57:33.574Z"
+    }
+  ],
+  "streak": 7
+}

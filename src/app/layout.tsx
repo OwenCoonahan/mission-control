@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { Sidebar } from "@/components/Sidebar";
 
 export const metadata: Metadata = {
   title: "Mission Control | Owen",
@@ -13,8 +14,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className="antialiased bg-[#0a0a0a]">
-        {children}
+      <body className="antialiased bg-zinc-950">
+        <div className="flex min-h-screen">
+          <Sidebar />
+          <main className="flex-1 md:ml-0 transition-all duration-300">
+            {children}
+          </main>
+        </div>
       </body>
     </html>
   );
