@@ -87,36 +87,37 @@ function TaskCard({ task }: { task: Task }) {
   const GoalIcon = goal.icon;
   
   const priorityStyles = {
-    high: 'bg-red-500/20 text-red-300 border-red-500/40',
-    medium: 'bg-amber-500/20 text-amber-300 border-amber-500/40',
-    low: 'bg-sky-500/20 text-sky-300 border-sky-500/40',
+    high: 'bg-red-500/20 text-red-400 border-red-500/30',
+    medium: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
+    low: 'bg-sky-500/20 text-sky-400 border-sky-500/30',
   };
   
   const goalColorStyles = {
-    violet: { bg: 'bg-violet-500/20', text: 'text-violet-300', border: 'border-violet-500/30' },
-    emerald: { bg: 'bg-emerald-500/20', text: 'text-emerald-300', border: 'border-emerald-500/30' },
-    orange: { bg: 'bg-orange-500/20', text: 'text-orange-300', border: 'border-orange-500/30' },
+    violet: { bg: 'bg-violet-500/20', text: 'text-violet-400', border: 'border-violet-500/30' },
+    emerald: { bg: 'bg-emerald-500/20', text: 'text-emerald-400', border: 'border-emerald-500/30' },
+    orange: { bg: 'bg-orange-500/20', text: 'text-orange-400', border: 'border-orange-500/30' },
   };
   
   const goalStyle = goalColorStyles[goal.color as keyof typeof goalColorStyles];
   
   return (
-    <div className="group relative bg-zinc-800/90 border border-zinc-600/50 rounded-xl p-4 hover:bg-zinc-750 hover:border-zinc-500/60 transition-all duration-200 cursor-grab shadow-lg shadow-black/30 backdrop-blur-sm">
-      <div className="absolute inset-0 rounded-xl bg-gradient-to-b from-white/[0.04] to-transparent pointer-events-none" />
-      <div className="relative flex items-start gap-3">
-        <GripVertical className="h-4 w-4 text-zinc-500 mt-0.5 opacity-0 group-hover:opacity-100 transition-opacity" />
+    <div className="group relative rounded-xl p-4 cursor-grab transition-all duration-200 bg-[#1e1e24] border border-[#2a2a32] hover:border-[#3a3a44] hover:bg-[#222229] shadow-[0_4px_24px_-4px_rgba(0,0,0,0.5)]">
+      {/* Subtle top highlight */}
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent rounded-t-xl" />
+      <div className="flex items-start gap-3">
+        <GripVertical className="h-4 w-4 text-zinc-600 mt-0.5 opacity-0 group-hover:opacity-100 transition-opacity" />
         <div className="flex-1 min-w-0">
-          <p className="text-[13px] text-zinc-50 font-medium leading-snug">{task.title}</p>
+          <p className="text-[13px] text-zinc-100 font-medium leading-snug">{task.title}</p>
           <div className="flex items-center gap-2 mt-3 flex-wrap">
             <Badge variant="outline" className={`text-[10px] font-semibold px-2 py-0.5 border ${priorityStyles[task.priority]}`}>
               {task.priority}
             </Badge>
-            <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md border ${goalStyle.bg} ${goalStyle.border}`}>
+            <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg border ${goalStyle.bg} ${goalStyle.border}`}>
               <GoalIcon className={`h-3 w-3 ${goalStyle.text}`} />
               <span className={`text-[10px] font-semibold ${goalStyle.text}`}>{goal.label}</span>
             </div>
           </div>
-          <div className="flex items-center gap-1.5 mt-3 text-zinc-400 text-[11px]">
+          <div className="flex items-center gap-1.5 mt-3 text-zinc-500 text-[11px]">
             <Clock className="h-3 w-3" />
             <span>{task.dueDate}</span>
           </div>
@@ -129,8 +130,8 @@ function TaskCard({ task }: { task: Task }) {
 function KanbanColumn({ title, tasks: columnTasks, color }: { title: string; tasks: Task[]; color: string }) {
   const colorStyles: Record<string, { dot: string; glow: string }> = {
     gray: { dot: 'bg-zinc-400', glow: '' },
-    yellow: { dot: 'bg-amber-400', glow: 'shadow-[0_0_8px_rgba(251,191,36,0.5)]' },
-    green: { dot: 'bg-emerald-400', glow: 'shadow-[0_0_8px_rgba(52,211,153,0.5)]' },
+    yellow: { dot: 'bg-amber-400', glow: 'shadow-[0_0_10px_rgba(251,191,36,0.6)]' },
+    green: { dot: 'bg-emerald-400', glow: 'shadow-[0_0_10px_rgba(52,211,153,0.6)]' },
   };
   
   const style = colorStyles[color];
@@ -140,10 +141,10 @@ function KanbanColumn({ title, tasks: columnTasks, color }: { title: string; tas
       <div className="flex items-center justify-between mb-4 px-1">
         <div className="flex items-center gap-2.5">
           <div className={`w-2.5 h-2.5 rounded-full ${style.dot} ${style.glow}`} />
-          <h3 className="text-sm font-semibold text-zinc-100">{title}</h3>
-          <span className="text-[11px] text-zinc-400 bg-zinc-800 px-2 py-0.5 rounded-md font-semibold border border-zinc-700/50">{columnTasks.length}</span>
+          <h3 className="text-sm font-semibold text-zinc-200">{title}</h3>
+          <span className="text-[11px] text-zinc-400 bg-[#1e1e24] px-2 py-0.5 rounded-md font-semibold border border-[#2a2a32]">{columnTasks.length}</span>
         </div>
-        <Button variant="ghost" size="icon" className="h-7 w-7 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-700">
+        <Button variant="ghost" size="icon" className="h-7 w-7 text-zinc-500 hover:text-zinc-200 hover:bg-[#1e1e24]">
           <MoreHorizontal className="h-4 w-4" />
         </Button>
       </div>
@@ -178,20 +179,20 @@ export default function MissionControl() {
     { key: 'body', progress: 68 },
   ];
 
-  const activityIconColors: Record<string, { bg: string; text: string }> = {
-    emerald: { bg: 'bg-emerald-500/25', text: 'text-emerald-400' },
-    violet: { bg: 'bg-violet-500/25', text: 'text-violet-400' },
-    orange: { bg: 'bg-orange-500/25', text: 'text-orange-400' },
-    blue: { bg: 'bg-blue-500/25', text: 'text-blue-400' },
-    yellow: { bg: 'bg-amber-500/25', text: 'text-amber-400' },
+  const activityIconColors: Record<string, { bg: string; text: string; border: string }> = {
+    emerald: { bg: 'bg-emerald-500/20', text: 'text-emerald-400', border: 'border-emerald-500/25' },
+    violet: { bg: 'bg-violet-500/20', text: 'text-violet-400', border: 'border-violet-500/25' },
+    orange: { bg: 'bg-orange-500/20', text: 'text-orange-400', border: 'border-orange-500/25' },
+    blue: { bg: 'bg-blue-500/20', text: 'text-blue-400', border: 'border-blue-500/25' },
+    yellow: { bg: 'bg-amber-500/20', text: 'text-amber-400', border: 'border-amber-500/25' },
   };
 
   return (
-    <div className="flex min-h-screen w-full bg-[#0c0c0f]">
+    <div className="flex min-h-screen w-full bg-[#0a0a0c]">
       {/* Sidebar */}
-      <aside className={`${sidebarOpen ? 'w-60' : 'w-0'} transition-all duration-300 overflow-hidden border-r border-zinc-800 bg-[#111114] flex flex-col`}>
+      <aside className={`${sidebarOpen ? 'w-60' : 'w-0'} transition-all duration-300 overflow-hidden border-r border-[#1e1e24] bg-[#121215] flex flex-col`}>
         {/* Sidebar Header */}
-        <div className="p-4 border-b border-zinc-800">
+        <div className="p-4 border-b border-[#1e1e24]">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 shadow-lg shadow-violet-500/30">
               <Sparkles className="h-5 w-5 text-white" />
@@ -214,8 +215,8 @@ export default function MissionControl() {
                   key={item.label}
                   className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all ${
                     item.active 
-                      ? 'bg-violet-500/20 text-violet-300 border border-violet-500/30 shadow-lg shadow-violet-500/10' 
-                      : 'text-zinc-400 hover:text-white hover:bg-zinc-800/80'
+                      ? 'bg-violet-500/15 text-violet-400 border border-violet-500/25 shadow-[0_0_20px_-4px_rgba(139,92,246,0.3)]' 
+                      : 'text-zinc-400 hover:text-white hover:bg-[#1e1e24]'
                   }`}
                 >
                   <Icon className="h-4 w-4" />
@@ -227,7 +228,7 @@ export default function MissionControl() {
         </nav>
 
         {/* Sidebar Footer */}
-        <div className="p-4 border-t border-zinc-800">
+        <div className="p-4 border-t border-[#1e1e24]">
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center text-white text-sm font-bold shadow-lg shadow-violet-500/25">
               OC
@@ -244,15 +245,15 @@ export default function MissionControl() {
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
         {/* Header */}
-        <header className="flex items-center justify-between px-6 py-4 border-b border-zinc-800 bg-[#111114]/80 backdrop-blur-md">
+        <header className="flex items-center justify-between px-6 py-4 border-b border-[#1e1e24] bg-[#0e0e10]/80 backdrop-blur-md">
           <div className="flex items-center gap-4">
             <button 
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="p-2 text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition-all"
+              className="p-2 text-zinc-400 hover:text-white hover:bg-[#1e1e24] rounded-lg transition-all"
             >
               <PanelLeft className="h-5 w-5" />
             </button>
-            <div className="w-px h-6 bg-zinc-700" />
+            <div className="w-px h-6 bg-[#2a2a32]" />
             <div>
               <h1 className="text-xl font-bold text-white">{greeting()}, Owen</h1>
               <p className="text-sm text-zinc-500">
@@ -266,10 +267,10 @@ export default function MissionControl() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
               <Input 
                 placeholder="Search tasks..." 
-                className="w-64 pl-9 bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-600 focus:border-violet-500/60 focus:ring-violet-500/25"
+                className="w-64 pl-9 bg-[#1e1e24] border-[#2a2a32] text-white placeholder:text-zinc-600 focus:border-violet-500/50 focus:ring-violet-500/20"
               />
             </div>
-            <Button variant="outline" size="icon" className="border-zinc-700 text-zinc-400 hover:text-white hover:bg-zinc-800 hover:border-zinc-600">
+            <Button variant="outline" size="icon" className="border-[#2a2a32] text-zinc-400 hover:text-white hover:bg-[#1e1e24] hover:border-[#3a3a44]">
               <Filter className="h-4 w-4" />
             </Button>
             <Button className="bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white font-semibold shadow-lg shadow-violet-500/30 border-0">
@@ -293,16 +294,17 @@ export default function MissionControl() {
               ].map((stat) => {
                 const Icon = stat.icon;
                 const colorStyles: Record<string, { bg: string; icon: string; border: string }> = {
-                  violet: { bg: 'bg-violet-500/20', icon: 'text-violet-400', border: 'border-violet-500/20' },
-                  amber: { bg: 'bg-amber-500/20', icon: 'text-amber-400', border: 'border-amber-500/20' },
-                  emerald: { bg: 'bg-emerald-500/20', icon: 'text-emerald-400', border: 'border-emerald-500/20' },
-                  blue: { bg: 'bg-blue-500/20', icon: 'text-blue-400', border: 'border-blue-500/20' },
+                  violet: { bg: 'bg-violet-500/15', icon: 'text-violet-400', border: 'border-violet-500/25' },
+                  amber: { bg: 'bg-amber-500/15', icon: 'text-amber-400', border: 'border-amber-500/25' },
+                  emerald: { bg: 'bg-emerald-500/15', icon: 'text-emerald-400', border: 'border-emerald-500/25' },
+                  blue: { bg: 'bg-blue-500/15', icon: 'text-blue-400', border: 'border-blue-500/25' },
                 };
                 const style = colorStyles[stat.color];
                 
                 return (
-                  <div key={stat.label} className={`relative bg-zinc-800/80 border border-zinc-700/60 rounded-xl p-5 shadow-xl shadow-black/20 overflow-hidden`}>
-                    <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] to-transparent pointer-events-none" />
+                  <div key={stat.label} className="relative rounded-xl p-5 bg-[#1a1a1f] border border-[#2a2a32] shadow-[0_4px_24px_-4px_rgba(0,0,0,0.5)] overflow-hidden">
+                    {/* Top highlight */}
+                    <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
                     <div className="relative flex items-center justify-between">
                       <div>
                         <p className="text-[11px] text-zinc-500 uppercase tracking-wider font-bold">{stat.label}</p>
@@ -313,7 +315,7 @@ export default function MissionControl() {
                       </div>
                     </div>
                     {stat.showProgress && (
-                      <div className="relative mt-4 h-2 bg-zinc-900 rounded-full overflow-hidden">
+                      <div className="relative mt-4 h-2.5 bg-[#0f0f12] rounded-full overflow-hidden border border-[#1e1e24]">
                         <div className="h-full w-[78%] bg-gradient-to-r from-blue-500 to-cyan-400 rounded-full shadow-[0_0_12px_rgba(59,130,246,0.5)]" />
                       </div>
                     )}
@@ -328,15 +330,16 @@ export default function MissionControl() {
                 const config = goalConfig[goal.key as keyof typeof goalConfig];
                 const Icon = config.icon;
                 const colorStyles: Record<string, { bg: string; text: string; progressFrom: string; progressTo: string; border: string; glow: string }> = {
-                  violet: { bg: 'bg-violet-500/20', text: 'text-violet-400', progressFrom: 'from-violet-500', progressTo: 'to-purple-400', border: 'border-violet-500/25', glow: 'shadow-[0_0_16px_rgba(139,92,246,0.3)]' },
-                  emerald: { bg: 'bg-emerald-500/20', text: 'text-emerald-400', progressFrom: 'from-emerald-500', progressTo: 'to-teal-400', border: 'border-emerald-500/25', glow: 'shadow-[0_0_16px_rgba(52,211,153,0.3)]' },
-                  orange: { bg: 'bg-orange-500/20', text: 'text-orange-400', progressFrom: 'from-orange-500', progressTo: 'to-amber-400', border: 'border-orange-500/25', glow: 'shadow-[0_0_16px_rgba(249,115,22,0.3)]' },
+                  violet: { bg: 'bg-violet-500/15', text: 'text-violet-400', progressFrom: 'from-violet-500', progressTo: 'to-purple-400', border: 'border-violet-500/25', glow: 'shadow-[0_0_16px_rgba(139,92,246,0.4)]' },
+                  emerald: { bg: 'bg-emerald-500/15', text: 'text-emerald-400', progressFrom: 'from-emerald-500', progressTo: 'to-teal-400', border: 'border-emerald-500/25', glow: 'shadow-[0_0_16px_rgba(52,211,153,0.4)]' },
+                  orange: { bg: 'bg-orange-500/15', text: 'text-orange-400', progressFrom: 'from-orange-500', progressTo: 'to-amber-400', border: 'border-orange-500/25', glow: 'shadow-[0_0_16px_rgba(249,115,22,0.4)]' },
                 };
                 const style = colorStyles[config.color];
                 
                 return (
-                  <div key={goal.key} className="relative bg-zinc-800/80 border border-zinc-700/60 rounded-xl p-5 shadow-xl shadow-black/20 overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] to-transparent pointer-events-none" />
+                  <div key={goal.key} className="relative rounded-xl p-5 bg-[#1a1a1f] border border-[#2a2a32] shadow-[0_4px_24px_-4px_rgba(0,0,0,0.5)] overflow-hidden">
+                    {/* Top highlight */}
+                    <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
                     <div className="relative flex items-center gap-4">
                       <div className={`h-12 w-12 rounded-xl ${style.bg} border ${style.border} flex items-center justify-center`}>
                         <Icon className={`h-6 w-6 ${style.text}`} />
@@ -346,7 +349,7 @@ export default function MissionControl() {
                           <p className="text-sm font-bold text-white">{config.label}</p>
                           <span className={`text-sm font-bold ${style.text}`}>{goal.progress}%</span>
                         </div>
-                        <div className="h-2.5 bg-zinc-900 rounded-full overflow-hidden">
+                        <div className="h-2.5 bg-[#0f0f12] rounded-full overflow-hidden border border-[#1e1e24]">
                           <div 
                             className={`h-full bg-gradient-to-r ${style.progressFrom} ${style.progressTo} rounded-full transition-all duration-500 ${style.glow}`} 
                             style={{ width: `${goal.progress}%` }} 
@@ -363,7 +366,7 @@ export default function MissionControl() {
             <div>
               <div className="flex items-center justify-between mb-5">
                 <h2 className="text-lg font-bold text-white">Task Board</h2>
-                <Badge variant="outline" className="bg-zinc-800 text-zinc-400 border-zinc-700 text-[11px] font-semibold">
+                <Badge variant="outline" className="bg-[#1a1a1f] text-zinc-400 border-[#2a2a32] text-[11px] font-semibold">
                   9 tasks
                 </Badge>
               </div>
@@ -377,13 +380,15 @@ export default function MissionControl() {
           </div>
 
           {/* Activity Feed */}
-          <div className="w-80 border-l border-zinc-800 p-4 overflow-auto bg-[#0c0c0f]">
-            <div className="bg-zinc-800/90 border border-zinc-700/60 rounded-xl shadow-2xl shadow-black/30 overflow-hidden">
-              <div className="p-4 border-b border-zinc-700/60 bg-zinc-900/50">
+          <div className="w-80 border-l border-[#1e1e24] p-4 overflow-auto bg-[#0a0a0c]">
+            <div className="rounded-xl bg-[#1a1a1f] border border-[#2a2a32] shadow-[0_8px_32px_-8px_rgba(0,0,0,0.6)] overflow-hidden">
+              {/* Top highlight */}
+              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+              <div className="p-4 border-b border-[#2a2a32] bg-[#161619]">
                 <div className="flex items-center justify-between">
                   <h3 className="text-sm font-bold text-white">Live Activity</h3>
-                  <Badge className="bg-emerald-500/25 text-emerald-400 border border-emerald-500/40 text-[10px] font-semibold px-2.5">
-                    <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full mr-1.5 animate-pulse shadow-[0_0_6px_rgba(52,211,153,0.8)]" />
+                  <Badge className="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-semibold px-2.5">
+                    <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full mr-1.5 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
                     Live
                   </Badge>
                 </div>
@@ -394,8 +399,8 @@ export default function MissionControl() {
                   const iconStyle = activityIconColors[activity.color];
                   return (
                     <div key={activity.id}>
-                      <div className="flex items-start gap-3 p-3 hover:bg-zinc-700/40 rounded-xl transition-colors cursor-pointer">
-                        <div className={`h-10 w-10 rounded-xl ${iconStyle.bg} flex items-center justify-center shrink-0 border border-white/5`}>
+                      <div className="flex items-start gap-3 p-3 hover:bg-[#222228] rounded-xl transition-colors cursor-pointer">
+                        <div className={`h-10 w-10 rounded-xl ${iconStyle.bg} border ${iconStyle.border} flex items-center justify-center shrink-0`}>
                           <Icon className={`h-4 w-4 ${iconStyle.text}`} />
                         </div>
                         <div className="flex-1 min-w-0">
@@ -404,7 +409,7 @@ export default function MissionControl() {
                         </div>
                         <span className="text-[10px] text-zinc-600 shrink-0 font-semibold">{activity.time}</span>
                       </div>
-                      {index < activities.length - 1 && <div className="h-px bg-zinc-700/40 mx-3" />}
+                      {index < activities.length - 1 && <div className="h-px bg-[#2a2a32] mx-3" />}
                     </div>
                   );
                 })}
