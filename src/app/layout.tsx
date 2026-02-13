@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { SidebarProvider } from "@/components/ui/sidebar";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -14,10 +13,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className="antialiased">
-        <SidebarProvider defaultOpen={true}>
-          {children}
-        </SidebarProvider>
+      <body className="antialiased bg-[#0a0a0a]">
+        {children}
       </body>
     </html>
   );

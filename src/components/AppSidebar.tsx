@@ -38,7 +38,7 @@ const navigationItems = [
 
 export function AppSidebar() {
   return (
-    <Sidebar collapsible="icon" className="border-r border-white/10">
+    <Sidebar className="border-r border-gray-800 bg-gray-900">
       <SidebarHeader className="border-b border-white/10 p-4">
         <div className="flex items-center gap-3">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-violet-500 to-purple-600">
