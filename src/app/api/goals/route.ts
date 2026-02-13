@@ -1,73 +1,117 @@
-import { NextRequest, NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
+import { NextResponse } from 'next/server'
+import fs from 'fs/promises'
+import path from 'path'
 
-const DATA_PATH = path.join(process.cwd(), 'data', 'goals.json');
+const GOALS_FILE = path.join(process.cwd(), 'data/goals.json')
 
-interface Goal {
-  id: 'mind' | 'business' | 'body';
-  title: string;
-  progress: number;
-  emoji?: string;
-  description?: string;
-  target?: string;
-  color?: string;
+export interface Goal {
+  id: 'mind' | 'business' | 'body'
+  title: string
+  emoji: string
+  description: string
+  progress: number
+  color: string
+  updatedAt?: string
 }
 
 interface GoalsData {
-  goals: Goal[];
+  goals: Goal[]
 }
 
-function readGoals(): GoalsData {
+async function readGoals(): Promise<GoalsData> {
   try {
-    const data = fs.readFileSync(DATA_PATH, 'utf-8');
-    return JSON.parse(data);
-  } catch {
-    return { goals: [] };
+    const data = await fs.readFile(GOALS_FILE, 'utf-8')
+    return JSON.parse(data)
+  } catch (error) {
+    // Return default goals if file doesn't exist
+    return {
+      goals: [
+        {
+          id: 'mind',
+          title: 'Calm Mind',
+          emoji: '🧘',
+          description: 'Less caffeine, deep breathing, deliberate time',
+          progress: 0,
+          color: 'violet'
+        },
+        {
+          id: 'business',
+          title: 'Grow Business',
+          emoji: '📈',
+          description: 'Do what moves the needle. Execute the playbook.',
+          progress: 0,
+          color: 'emerald'
+        },
+        {
+          id: 'body',
+          title: 'Greek God Body',
+          emoji: '💪',
+          description: 'Eat and workout with discipline',
+          progress: 0,
+          color: 'orange'
+        }
+      ]
+    }
   }
 }
 
-function writeGoals(data: GoalsData): void {
-  fs.writeFileSync(DATA_PATH, JSON.stringify(data, null, 2));
+async function writeGoals(data: GoalsData): Promise<void> {
+  await fs.writeFile(GOALS_FILE, JSON.stringify(data, null, 2))
 }
 
-// GET /api/goals - Get all goals
 export async function GET() {
   try {
-    const data = readGoals();
-    return NextResponse.json(data);
+    const data = await readGoals()
+    return NextResponse.json(data)
   } catch (error) {
-    console.error('Error reading goals:', error);
-    return NextResponse.json({ goals: [] }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Failed to read goals' },
+      { status: 500 }
+    )
   }
 }
 
-// PUT /api/goals - Update a goal
-export async function PUT(request: NextRequest) {
+export async function PUT(request: Request) {
   try {
-    const body = await request.json();
-    const { id, ...updates } = body;
-    
-    if (!id) {
-      return NextResponse.json({ error: 'Goal ID is required' }, { status: 400 });
+    const body = await request.json()
+    const { id, progress } = body
+
+    if (!id || progress === undefined) {
+      return NextResponse.json(
+        { error: 'Goal ID and progress are required' },
+        { status: 400 }
+      )
     }
-    
-    const data = readGoals();
-    const goalIndex = data.goals.findIndex(g => g.id === id);
+
+    if (progress < 0 || progress > 100) {
+      return NextResponse.json(
+        { error: 'Progress must be between 0 and 100' },
+        { status: 400 }
+      )
+    }
+
+    const data = await readGoals()
+    const goalIndex = data.goals.findIndex(goal => goal.id === id)
     
     if (goalIndex === -1) {
-      return NextResponse.json({ error: 'Goal not found' }, { status: 404 });
+      return NextResponse.json(
+        { error: 'Goal not found' },
+        { status: 404 }
+      )
     }
-    
+
     data.goals[goalIndex] = {
       ...data.goals[goalIndex],
-      ...updates,
-    };
-    
-    writeGoals(data);
-    return NextResponse.json(data.goals[goalIndex]);
+      progress,
+      updatedAt: new Date().toISOString()
+    }
+
+    await writeGoals(data)
+    return NextResponse.json(data.goals[goalIndex])
   } catch (error) {
-    console.error('Error updating goal:', error);
-    return NextResponse.json({ error: 'Failed to update goal' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Failed to update goal' },
+      { status: 500 }
+    )
   }
 }

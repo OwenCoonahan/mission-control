@@ -17,7 +17,7 @@ export default function RootLayout({
       <body className="antialiased bg-zinc-950">
         <div className="flex min-h-screen">
           <Sidebar />
-          <main className="flex-1 md:ml-0 transition-all duration-300">
+          <main className="flex-1 md:ml-64 transition-all duration-300">
             {children}
           </main>
         </div>

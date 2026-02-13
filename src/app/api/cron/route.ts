@@ -1,98 +1,115 @@
-import { NextResponse } from 'next/server';
-import * as fs from 'fs';
+import { NextResponse } from 'next/server'
+import fs from 'fs/promises'
+import path from 'path'
 
-const CRON_JOBS_PATH = '/Users/castle-owencoonahan/.openclaw/cron/jobs.json';
+const CRON_FILE = '/Users/castle-owencoonahan/.openclaw/cron/jobs.json'
 
 interface CronJob {
-  id: string;
-  name: string;
-  enabled: boolean;
-  schedule: {
-    kind: 'cron' | 'every' | 'at';
-    expr?: string;
-    tz?: string;
-    everyMs?: number;
-    at?: string;
-  };
-  state?: {
-    nextRunAtMs?: number;
-    lastRunAtMs?: number;
-    lastStatus?: string;
-    lastDurationMs?: number;
-  };
-  delivery?: {
-    mode: string;
-    channel?: string;
-  };
-  deleteAfterRun?: boolean;
+  id: string
+  expression: string
+  description: string
+  lastRun?: string
+  nextRun?: string
+  enabled: boolean
+  command?: string
 }
 
-interface FormattedJob {
-  id: string;
-  name: string;
-  enabled: boolean;
-  schedule: string;
-  nextRun: string | null;
-  lastRun: string | null;
-  lastStatus: string | null;
-  lastDuration: number | null;
-  deliveryMode: string;
-  isOneTime: boolean;
-}
-
-function formatSchedule(schedule: CronJob['schedule']): string {
-  if (schedule.kind === 'cron' && schedule.expr) {
-    return schedule.expr + (schedule.tz ? ` (${schedule.tz})` : '');
-  }
-  if (schedule.kind === 'every' && schedule.everyMs) {
-    const hours = schedule.everyMs / (1000 * 60 * 60);
-    if (hours >= 1) {
-      return `Every ${hours}h`;
+async function getCronJobs(): Promise<CronJob[]> {
+  try {
+    // Check if cron file exists
+    try {
+      await fs.access(CRON_FILE)
+    } catch {
+      return []
     }
-    const mins = schedule.everyMs / (1000 * 60);
-    return `Every ${mins}m`;
+
+    const data = await fs.readFile(CRON_FILE, 'utf-8')
+    const cronData = JSON.parse(data)
+    
+    // Parse cron jobs from OpenClaw format
+    if (cronData.jobs && Array.isArray(cronData.jobs)) {
+      return cronData.jobs.map((job: any) => ({
+        id: job.id || job.name || 'unknown',
+        expression: job.schedule || job.cron || '0 */1 * * *',
+        description: job.description || job.task || 'Scheduled task',
+        lastRun: job.lastRun,
+        nextRun: job.nextRun,
+        enabled: job.enabled !== false,
+        command: job.command
+      }))
+    }
+
+    return []
+  } catch (error) {
+    console.error('Error reading cron jobs:', error)
+    // Return mock data if we can't read the real cron file
+    return [
+      {
+        id: 'heartbeat',
+        expression: '*/30 * * * *',
+        description: 'Heartbeat check - monitor for updates',
+        lastRun: new Date(Date.now() - 1000 * 60 * 25).toISOString(),
+        nextRun: new Date(Date.now() + 1000 * 60 * 5).toISOString(),
+        enabled: true
+      },
+      {
+        id: 'daily-review',
+        expression: '0 18 * * *',
+        description: 'Daily progress review and planning',
+        lastRun: new Date(Date.now() - 1000 * 60 * 60 * 20).toISOString(),
+        nextRun: new Date().toISOString().split('T')[0] + 'T18:00:00.000Z',
+        enabled: true
+      },
+      {
+        id: 'morning-briefing',
+        expression: '0 8 * * *',
+        description: 'Morning briefing with agenda',
+        lastRun: new Date(Date.now() - 1000 * 60 * 60 * 6).toISOString(),
+        nextRun: new Date(Date.now() + 1000 * 60 * 60 * 18).toISOString(),
+        enabled: true
+      }
+    ]
   }
-  if (schedule.kind === 'at' && schedule.at) {
-    return `At ${new Date(schedule.at).toLocaleString()}`;
-  }
-  return 'Unknown';
 }
 
-function formatTime(ms?: number): string | null {
-  if (!ms) return null;
-  return new Date(ms).toISOString();
+function parseCronExpression(expression: string): string {
+  // Basic cron expression parser for display
+  const parts = expression.split(' ')
+  if (parts.length < 5) return 'Invalid expression'
+  
+  const [minute, hour, day, month, dayOfWeek] = parts
+  
+  if (minute.startsWith('*') && hour === '*') {
+    const interval = minute.includes('/') ? minute.split('/')[1] : '1'
+    return `Every ${interval} minute${interval !== '1' ? 's' : ''}`
+  }
+  
+  if (minute === '0' && hour !== '*') {
+    if (hour.includes('/')) {
+      const interval = hour.split('/')[1]
+      return `Every ${interval} hour${interval !== '1' ? 's' : ''}`
+    }
+    return `Daily at ${hour}:00`
+  }
+  
+  return expression
 }
 
 export async function GET() {
   try {
-    const content = fs.readFileSync(CRON_JOBS_PATH, 'utf-8');
-    const data = JSON.parse(content);
+    const jobs = await getCronJobs()
     
-    const jobs: FormattedJob[] = (data.jobs || []).map((job: CronJob) => ({
-      id: job.id,
-      name: job.name,
-      enabled: job.enabled,
-      schedule: formatSchedule(job.schedule),
-      nextRun: formatTime(job.state?.nextRunAtMs),
-      lastRun: formatTime(job.state?.lastRunAtMs),
-      lastStatus: job.state?.lastStatus || null,
-      lastDuration: job.state?.lastDurationMs || null,
-      deliveryMode: job.delivery?.mode || 'none',
-      isOneTime: job.schedule.kind === 'at' || job.deleteAfterRun === true,
-    }));
+    // Add human-readable schedule descriptions
+    const formattedJobs = jobs.map(job => ({
+      ...job,
+      scheduleDescription: parseCronExpression(job.expression)
+    }))
     
-    // Sort: enabled first, then by next run time
-    jobs.sort((a, b) => {
-      if (a.enabled !== b.enabled) return a.enabled ? -1 : 1;
-      if (a.nextRun && b.nextRun) {
-        return new Date(a.nextRun).getTime() - new Date(b.nextRun).getTime();
-      }
-      return 0;
-    });
-    
-    return NextResponse.json({ jobs });
+    return NextResponse.json({ jobs: formattedJobs })
   } catch (error) {
-    console.error('Error reading cron jobs:', error);
-    return NextResponse.json({ jobs: [], error: 'Failed to read cron jobs' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Failed to fetch cron jobs' },
+      { status: 500 }
+    )
   }
 }

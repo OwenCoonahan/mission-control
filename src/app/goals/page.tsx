@@ -1,456 +1,352 @@
-'use client';
+'use client'
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Progress } from '@/components/ui/progress'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Label } from '@/components/ui/label'
+import { Slider } from '@/components/ui/slider'
+import { Badge } from '@/components/ui/badge'
 import { 
   Target, 
-  Brain, 
-  Briefcase, 
-  Dumbbell, 
-  Pencil, 
-  Clock,
+  Edit, 
+  TrendingUp, 
   CheckCircle2,
-  Loader2
-} from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
-import { Slider } from '@/components/ui/slider';
+  Calendar,
+  BarChart3
+} from 'lucide-react'
 
-// Types
 interface Goal {
-  id: 'mind' | 'business' | 'body';
-  title: string;
-  progress: number;
-  target: string;
-  updatedAt: string;
+  id: 'mind' | 'business' | 'body'
+  title: string
+  emoji: string
+  description: string
+  progress: number
+  color: string
+  updatedAt?: string
 }
 
 interface Task {
-  id: string;
-  title: string;
-  goal: 'mind' | 'business' | 'body';
-  priority: 'high' | 'medium' | 'low';
-  status: 'backlog' | 'today' | 'in-progress' | 'done';
-  dueDate: string;
+  id: string
+  title: string
+  goal: 'mind' | 'business' | 'body' | null
+  status: 'backlog' | 'today' | 'in-progress' | 'done'
+  completed: boolean
 }
 
-// Goal configuration
-const goalConfig = {
-  mind: {
-    icon: Brain,
-    color: 'violet',
-    gradient: 'from-violet-500 to-purple-600',
-    bgColor: 'bg-violet-500/15',
-    borderColor: 'border-violet-500/30',
-    textColor: 'text-violet-400',
-    progressBg: 'bg-gradient-to-r from-violet-500 to-purple-400',
-    hoverBorder: 'hover:border-violet-500/50',
-  },
-  business: {
-    icon: Briefcase,
-    color: 'emerald',
-    gradient: 'from-emerald-500 to-teal-600',
-    bgColor: 'bg-emerald-500/15',
-    borderColor: 'border-emerald-500/30',
-    textColor: 'text-emerald-400',
-    progressBg: 'bg-gradient-to-r from-emerald-500 to-teal-400',
-    hoverBorder: 'hover:border-emerald-500/50',
-  },
-  body: {
-    icon: Dumbbell,
-    color: 'orange',
-    gradient: 'from-orange-500 to-amber-600',
-    bgColor: 'bg-orange-500/15',
-    borderColor: 'border-orange-500/30',
-    textColor: 'text-orange-400',
-    progressBg: 'bg-gradient-to-r from-orange-500 to-amber-400',
-    hoverBorder: 'hover:border-orange-500/50',
-  },
-};
-
-// Format date helper
-function formatDate(dateString: string): string {
-  const date = new Date(dateString);
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffMins = Math.floor(diffMs / 60000);
-  const diffHours = Math.floor(diffMs / 3600000);
-  const diffDays = Math.floor(diffMs / 86400000);
-
-  if (diffMins < 60) return `${diffMins} minutes ago`;
-  if (diffHours < 24) return `${diffHours} hours ago`;
-  if (diffDays === 1) return 'Yesterday';
-  if (diffDays < 7) return `${diffDays} days ago`;
-  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+const GOAL_GRADIENT_CLASSES = {
+  mind: 'bg-gradient-to-br from-violet-600/20 to-purple-600/20 border-violet-500/30',
+  business: 'bg-gradient-to-br from-emerald-600/20 to-green-600/20 border-emerald-500/30',
+  body: 'bg-gradient-to-br from-orange-600/20 to-red-600/20 border-orange-500/30'
 }
 
-// Priority badge styles
-const priorityStyles = {
-  high: 'bg-red-500/20 text-red-400 border-red-500/30',
-  medium: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
-  low: 'bg-sky-500/20 text-sky-400 border-sky-500/30',
-};
-
-// Status badge styles
-const statusStyles = {
-  'backlog': 'bg-zinc-500/20 text-zinc-400 border-zinc-500/30',
-  'today': 'bg-blue-500/20 text-blue-400 border-blue-500/30',
-  'in-progress': 'bg-amber-500/20 text-amber-400 border-amber-500/30',
-  'done': 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
-};
+const PROGRESS_COLORS = {
+  mind: 'bg-violet-500',
+  business: 'bg-emerald-500', 
+  body: 'bg-orange-500'
+}
 
 export default function GoalsPage() {
-  const [goals, setGoals] = useState<Goal[]>([]);
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [editingGoal, setEditingGoal] = useState<Goal | null>(null);
-  const [editProgress, setEditProgress] = useState(0);
-  const [saving, setSaving] = useState(false);
+  const [goals, setGoals] = useState<Goal[]>([])
+  const [tasks, setTasks] = useState<Task[]>([])
+  const [loading, setLoading] = useState(true)
+  const [editingGoal, setEditingGoal] = useState<Goal | null>(null)
+  const [tempProgress, setTempProgress] = useState<number>(0)
 
-  // Fetch goals and tasks
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const [goalsRes, tasksRes] = await Promise.all([
-          fetch('/api/goals'),
-          fetch('/api/tasks'),
-        ]);
-        
-        if (goalsRes.ok) {
-          const goalsData = await goalsRes.json();
-          setGoals(goalsData);
-        }
-        
-        if (tasksRes.ok) {
-          const tasksData = await tasksRes.json();
-          setTasks(tasksData);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    
-    fetchData();
-  }, []);
+    fetchData()
+  }, [])
 
-  // Open edit modal
-  const handleEdit = (goal: Goal) => {
-    setEditingGoal(goal);
-    setEditProgress(goal.progress);
-  };
-
-  // Save progress
-  const handleSave = async () => {
-    if (!editingGoal) return;
-    
-    setSaving(true);
+  async function fetchData() {
     try {
-      const res = await fetch('/api/goals', {
+      const [goalsRes, tasksRes] = await Promise.all([
+        fetch('/api/goals'),
+        fetch('/api/tasks')
+      ])
+
+      const goalsData = await goalsRes.json()
+      const tasksData = await tasksRes.json()
+
+      setGoals(goalsData.goals || [])
+      setTasks(tasksData.tasks || [])
+    } catch (error) {
+      console.error('Failed to fetch data:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function updateGoalProgress(goalId: string, progress: number) {
+    try {
+      const response = await fetch('/api/goals', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          id: editingGoal.id,
-          progress: editProgress,
-        }),
-      });
-      
-      if (res.ok) {
-        const updatedGoal = await res.json();
-        setGoals(goals.map(g => g.id === updatedGoal.id ? updatedGoal : g));
-        setEditingGoal(null);
+        body: JSON.stringify({ id: goalId, progress })
+      })
+
+      if (response.ok) {
+        await fetchData()
+        setEditingGoal(null)
       }
     } catch (error) {
-      console.error('Error saving progress:', error);
-    } finally {
-      setSaving(false);
+      console.error('Failed to update goal:', error)
     }
-  };
+  }
 
-  // Get tasks for a specific goal
-  const getGoalTasks = (goalId: string) => {
-    return tasks.filter(t => t.goal === goalId && t.status !== 'done').slice(0, 3);
-  };
+  function getGoalTasks(goalId: string) {
+    return tasks.filter(task => task.goal === goalId)
+  }
 
-  // Calculate overall progress
-  const overallProgress = goals.length > 0 
-    ? Math.round(goals.reduce((sum, g) => sum + g.progress, 0) / goals.length)
-    : 0;
+  function getCompletedTasks(goalId: string) {
+    return getGoalTasks(goalId).filter(task => task.completed)
+  }
+
+  function getProgressDescription(progress: number) {
+    if (progress < 25) return 'Getting started'
+    if (progress < 50) return 'Making progress'
+    if (progress < 75) return 'Going strong'
+    if (progress < 100) return 'Almost there!'
+    return 'Goal achieved!'
+  }
+
+  function getProgressColor(progress: number) {
+    if (progress < 25) return 'text-red-400'
+    if (progress < 50) return 'text-yellow-400'
+    if (progress < 75) return 'text-blue-400'
+    return 'text-green-400'
+  }
 
   if (loading) {
     return (
-      <div className="flex-1 flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-violet-400" />
+      <div className="min-h-screen bg-zinc-950 p-4 md:p-8">
+        <div className="animate-pulse">
+          <div className="h-8 bg-zinc-700 rounded w-64 mb-8"></div>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="h-96 bg-zinc-800 rounded-lg"></div>
+            ))}
+          </div>
+        </div>
       </div>
-    );
+    )
   }
 
   return (
-    <div className="flex-1 p-8 overflow-auto">
+    <div className="min-h-screen bg-zinc-950 p-4 md:p-8">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
-        <div className="flex items-center gap-4">
-          <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-lg shadow-violet-500/30">
-            <Target className="h-7 w-7 text-white" />
-          </div>
-          <div>
-            <h1 className="text-3xl font-bold text-white">Goals</h1>
-            <p className="text-zinc-500">Track your progress toward your life goals</p>
-          </div>
-        </div>
-        
-        {/* Overall Progress */}
-        <div className="flex items-center gap-4 px-6 py-4 bg-zinc-900 rounded-2xl border border-zinc-700">
-          <div>
-            <p className="text-xs text-zinc-500 uppercase tracking-wider font-bold">Overall Progress</p>
-            <p className="text-3xl font-bold text-white">{overallProgress}%</p>
-          </div>
-          <div className="w-24 h-24 relative">
-            <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-              <circle
-                cx="50"
-                cy="50"
-                r="40"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="8"
-                className="text-zinc-800"
-              />
-              <circle
-                cx="50"
-                cy="50"
-                r="40"
-                fill="none"
-                stroke="url(#progressGradient)"
-                strokeWidth="8"
-                strokeLinecap="round"
-                strokeDasharray={`${overallProgress * 2.51} 251`}
-                className="transition-all duration-500"
-              />
-              <defs>
-                <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#8b5cf6" />
-                  <stop offset="50%" stopColor="#10b981" />
-                  <stop offset="100%" stopColor="#f97316" />
-                </linearGradient>
-              </defs>
-            </svg>
-          </div>
-        </div>
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-white mb-2">Goals</h1>
+        <p className="text-zinc-400">
+          Track your progress across life's key areas
+        </p>
       </div>
 
-      {/* Goal Cards */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {goals.map((goal) => {
-          const config = goalConfig[goal.id];
-          const Icon = config.icon;
-          const relatedTasks = getGoalTasks(goal.id);
-          
+      {/* Goals Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+        {goals.map(goal => {
+          const goalTasks = getGoalTasks(goal.id)
+          const completedTasks = getCompletedTasks(goal.id)
+          const progressDescription = getProgressDescription(goal.progress)
+
           return (
-            <Card 
-              key={goal.id} 
-              className={`bg-zinc-900 border-zinc-700 ${config.hoverBorder} transition-all duration-300 shadow-xl overflow-hidden`}
-            >
-              {/* Color accent bar at top */}
-              <div className={`h-1.5 bg-gradient-to-r ${config.gradient}`} />
-              
+            <Card key={goal.id} className={`${GOAL_GRADIENT_CLASSES[goal.id]} relative overflow-hidden`}>
               <CardHeader className="pb-4">
                 <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-4">
-                    <div className={`h-14 w-14 rounded-2xl ${config.bgColor} border ${config.borderColor} flex items-center justify-center`}>
-                      <Icon className={`h-7 w-7 ${config.textColor}`} />
-                    </div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-4xl">{goal.emoji}</span>
                     <div>
-                      <CardTitle className="text-xl font-bold text-white">{goal.title}</CardTitle>
-                      <div className="flex items-center gap-1.5 mt-1 text-zinc-500 text-xs">
-                        <Clock className="h-3 w-3" />
-                        <span>Updated {formatDate(goal.updatedAt)}</span>
-                      </div>
+                      <CardTitle className="text-xl text-white">
+                        {goal.title}
+                      </CardTitle>
+                      <CardDescription className="text-zinc-300 text-sm mt-1">
+                        {goal.description}
+                      </CardDescription>
                     </div>
                   </div>
-                  <Button 
-                    variant="ghost" 
-                    size="icon"
-                    onClick={() => handleEdit(goal)}
-                    className="h-9 w-9 text-zinc-500 hover:text-white hover:bg-zinc-800"
+                  
+                  <Dialog 
+                    open={editingGoal?.id === goal.id} 
+                    onOpenChange={(open) => {
+                      if (open) {
+                        setEditingGoal(goal)
+                        setTempProgress(goal.progress)
+                      } else {
+                        setEditingGoal(null)
+                      }
+                    }}
                   >
-                    <Pencil className="h-4 w-4" />
-                  </Button>
+                    <DialogTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-8 w-8 p-0 text-zinc-400 hover:text-white"
+                      >
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="bg-zinc-900 border-zinc-700">
+                      <DialogHeader>
+                        <DialogTitle className="text-white flex items-center gap-2">
+                          <span className="text-2xl">{goal.emoji}</span>
+                          Update {goal.title} Progress
+                        </DialogTitle>
+                        <DialogDescription className="text-zinc-400">
+                          Adjust your progress for this goal
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="space-y-6">
+                        <div className="space-y-4">
+                          <div className="flex justify-between items-center">
+                            <Label className="text-white">Progress</Label>
+                            <span className="text-xl font-bold text-white">{tempProgress}%</span>
+                          </div>
+                          <Slider
+                            value={[tempProgress]}
+                            onValueChange={([value]) => setTempProgress(value)}
+                            max={100}
+                            step={5}
+                            className="w-full"
+                          />
+                          <div className="text-center">
+                            <span className={`text-sm font-medium ${getProgressColor(tempProgress)}`}>
+                              {getProgressDescription(tempProgress)}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="flex justify-end gap-2">
+                          <Button
+                            variant="outline"
+                            onClick={() => setEditingGoal(null)}
+                            className="border-zinc-600 text-zinc-300 hover:bg-zinc-800"
+                          >
+                            Cancel
+                          </Button>
+                          <Button
+                            onClick={() => updateGoalProgress(goal.id, tempProgress)}
+                            className="bg-violet-600 hover:bg-violet-700"
+                          >
+                            Update Progress
+                          </Button>
+                        </div>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
                 </div>
               </CardHeader>
               
-              <CardContent className="space-y-6">
-                {/* Progress Section */}
-                <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-sm font-semibold text-zinc-400">Progress</span>
-                    <span className={`text-2xl font-bold ${config.textColor}`}>{goal.progress}%</span>
-                  </div>
-                  <div className="h-4 bg-zinc-800 rounded-full overflow-hidden">
-                    <div 
-                      className={`h-full ${config.progressBg} rounded-full transition-all duration-500`}
-                      style={{ width: `${goal.progress}%` }}
-                    />
-                  </div>
-                </div>
-                
-                {/* Target Section */}
-                <div className={`p-4 rounded-xl ${config.bgColor} border ${config.borderColor}`}>
-                  <p className="text-xs text-zinc-500 uppercase tracking-wider font-bold mb-2">Target</p>
-                  <p className="text-sm text-zinc-200 leading-relaxed">{goal.target}</p>
-                </div>
-                
-                {/* Related Tasks Section */}
-                {relatedTasks.length > 0 && (
+              <CardContent>
+                <div className="space-y-4">
+                  {/* Progress Bar */}
                   <div>
-                    <p className="text-xs text-zinc-500 uppercase tracking-wider font-bold mb-3">Active Tasks</p>
-                    <div className="space-y-2">
-                      {relatedTasks.map((task) => (
-                        <div 
-                          key={task.id}
-                          className="flex items-center gap-3 p-3 bg-zinc-800/50 rounded-xl border border-zinc-700/50"
-                        >
-                          <div className={`h-8 w-8 rounded-lg ${config.bgColor} border ${config.borderColor} flex items-center justify-center`}>
-                            <CheckCircle2 className={`h-4 w-4 ${config.textColor}`} />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm text-zinc-200 truncate">{task.title}</p>
-                            <div className="flex items-center gap-2 mt-1">
-                              <Badge variant="outline" className={`text-xs px-1.5 py-0 border ${priorityStyles[task.priority]}`}>
-                                {task.priority}
-                              </Badge>
-                              <Badge variant="outline" className={`text-xs px-1.5 py-0 border ${statusStyles[task.status]}`}>
-                                {task.status.replace('-', ' ')}
-                              </Badge>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-sm text-zinc-300">Progress</span>
+                      <span className="text-lg font-bold text-white">{goal.progress}%</span>
+                    </div>
+                    <div className="relative">
+                      <Progress 
+                        value={goal.progress} 
+                        className="h-3 bg-zinc-700"
+                      />
+                      <div 
+                        className={`absolute top-0 left-0 h-3 ${PROGRESS_COLORS[goal.id]} rounded-full transition-all`}
+                        style={{ width: `${goal.progress}%` }}
+                      />
+                    </div>
+                    <p className={`text-xs mt-1 ${getProgressColor(goal.progress)}`}>
+                      {progressDescription}
+                    </p>
+                  </div>
+
+                  {/* Stats */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="text-center p-3 bg-zinc-800/50 rounded-lg">
+                      <div className="text-2xl font-bold text-white">
+                        {completedTasks.length}
+                      </div>
+                      <div className="text-xs text-zinc-400">Completed</div>
+                    </div>
+                    <div className="text-center p-3 bg-zinc-800/50 rounded-lg">
+                      <div className="text-2xl font-bold text-white">
+                        {goalTasks.length}
+                      </div>
+                      <div className="text-xs text-zinc-400">Total Tasks</div>
                     </div>
                   </div>
-                )}
-                
-                {relatedTasks.length === 0 && (
-                  <div className="py-4 text-center text-zinc-500 text-sm">
-                    No active tasks for this goal
-                  </div>
-                )}
+
+                  {/* Related Tasks */}
+                  {goalTasks.length > 0 && (
+                    <div>
+                      <h4 className="text-sm font-medium text-white mb-2 flex items-center gap-1">
+                        <CheckCircle2 className="h-4 w-4" />
+                        Related Tasks
+                      </h4>
+                      <div className="space-y-1 max-h-32 overflow-y-auto">
+                        {goalTasks.slice(0, 5).map(task => (
+                          <div key={task.id} className="flex items-center gap-2 p-2 bg-zinc-800/30 rounded text-sm">
+                            <div className={`w-2 h-2 rounded-full ${task.completed ? 'bg-green-400' : 'bg-zinc-500'}`} />
+                            <span className={`flex-1 ${task.completed ? 'text-zinc-400 line-through' : 'text-zinc-200'}`}>
+                              {task.title}
+                            </span>
+                          </div>
+                        ))}
+                        {goalTasks.length > 5 && (
+                          <p className="text-xs text-zinc-500 text-center">
+                            +{goalTasks.length - 5} more tasks
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Last Updated */}
+                  {goal.updatedAt && (
+                    <div className="flex items-center gap-1 text-xs text-zinc-500">
+                      <Calendar className="h-3 w-3" />
+                      Updated {new Date(goal.updatedAt).toLocaleDateString()}
+                    </div>
+                  )}
+                </div>
               </CardContent>
             </Card>
-          );
+          )
         })}
       </div>
 
-      {/* Edit Progress Dialog */}
-      <Dialog open={!!editingGoal} onOpenChange={(open) => !open && setEditingGoal(null)}>
-        <DialogContent className="bg-zinc-900 border-zinc-700 text-white sm:max-w-md">
-          {editingGoal && (
-            <>
-              <DialogHeader>
-                <DialogTitle className="flex items-center gap-3">
-                  {(() => {
-                    const config = goalConfig[editingGoal.id];
-                    const Icon = config.icon;
-                    return (
-                      <>
-                        <div className={`h-10 w-10 rounded-xl ${config.bgColor} border ${config.borderColor} flex items-center justify-center`}>
-                          <Icon className={`h-5 w-5 ${config.textColor}`} />
-                        </div>
-                        <span>Update {editingGoal.title}</span>
-                      </>
-                    );
-                  })()}
-                </DialogTitle>
-                <DialogDescription className="text-zinc-500">
-                  Adjust your progress for this goal
-                </DialogDescription>
-              </DialogHeader>
-              
-              <div className="py-6 space-y-6">
-                {/* Progress Display */}
-                <div className="text-center">
-                  <span className={`text-6xl font-bold ${goalConfig[editingGoal.id].textColor}`}>
-                    {editProgress}%
-                  </span>
-                </div>
-                
-                {/* Slider */}
-                <div className="px-2">
-                  <Slider
-                    value={[editProgress]}
-                    onValueChange={(value) => setEditProgress(value[0])}
-                    max={100}
-                    step={1}
-                    className="w-full"
-                  />
-                </div>
-                
-                {/* Quick buttons */}
-                <div className="flex justify-center gap-2">
-                  {[0, 25, 50, 75, 100].map((val) => (
-                    <Button
-                      key={val}
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setEditProgress(val)}
-                      className={`text-xs border-zinc-700 hover:bg-zinc-800 ${
-                        editProgress === val ? 'bg-zinc-800 text-white' : 'text-zinc-400'
-                      }`}
-                    >
-                      {val}%
-                    </Button>
-                  ))}
-                </div>
-                
-                {/* Last updated */}
-                <div className="text-center text-xs text-zinc-500">
-                  Last updated: {new Date(editingGoal.updatedAt).toLocaleString('en-US', {
-                    month: 'short',
-                    day: 'numeric',
-                    year: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}
-                </div>
+      {/* Summary Stats */}
+      <Card className="bg-zinc-900 border-zinc-700">
+        <CardHeader>
+          <CardTitle className="text-white flex items-center gap-2">
+            <BarChart3 className="h-5 w-5 text-violet-400" />
+            Goals Overview
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="text-center">
+              <div className="text-3xl font-bold text-white mb-2">
+                {Math.round(goals.reduce((acc, goal) => acc + goal.progress, 0) / goals.length)}%
               </div>
-              
-              <DialogFooter>
-                <Button 
-                  variant="outline" 
-                  onClick={() => setEditingGoal(null)}
-                  className="border-zinc-700 text-zinc-400 hover:bg-zinc-800 hover:text-white"
-                >
-                  Cancel
-                </Button>
-                <Button 
-                  onClick={handleSave}
-                  disabled={saving}
-                  className={`bg-gradient-to-r ${goalConfig[editingGoal.id].gradient} text-white hover:opacity-90`}
-                >
-                  {saving ? (
-                    <>
-                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      Saving...
-                    </>
-                  ) : (
-                    'Save Progress'
-                  )}
-                </Button>
-              </DialogFooter>
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
+              <p className="text-zinc-400 text-sm">Average Progress</p>
+            </div>
+            
+            <div className="text-center">
+              <div className="text-3xl font-bold text-white mb-2">
+                {goals.filter(goal => goal.progress >= 75).length}
+              </div>
+              <p className="text-zinc-400 text-sm">Goals Above 75%</p>
+            </div>
+            
+            <div className="text-center">
+              <div className="text-3xl font-bold text-white mb-2">
+                {tasks.filter(task => task.goal && task.completed).length}
+              </div>
+              <p className="text-zinc-400 text-sm">Goal Tasks Completed</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
-  );
+  )
 }
