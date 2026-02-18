@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mission Control — Owen Coonahan</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  @font-face { font-family: 'Geist'; src: local('Geist'); }
+  @font-face { font-family: 'Geist Mono'; src: local('Geist Mono'); }
+  :root { --bg: #09090b; --card: #18181b; --border: #27272a; --muted: #71717a; --fg: #fafafa; --accent: #3b82f6; }
+  .light { --bg: #fafafa; --card: #ffffff; --border: #e4e4e7; --muted: #71717a; --fg: #09090b; --accent: #2563eb; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Geist', system-ui, sans-serif; background: var(--bg); color: var(--fg); min-height: 100vh; }
+  .mono { font-family: 'Geist Mono', monospace; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .card-sm { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+  .badge { display: inline-flex; align-items: center; padding: 2px 10px; border-radius: 9999px; font-size: 12px; font-weight: 500; }
+  .badge-green { background: #052e16; color: #4ade80; border: 1px solid #166534; }
+  .badge-yellow { background: #422006; color: #facc15; border: 1px solid #854d0e; }
+  .badge-red { background: #450a0a; color: #f87171; border: 1px solid #991b1b; }
+  .badge-blue { background: #172554; color: #60a5fa; border: 1px solid #1e40af; }
+  .badge-muted { background: #27272a; color: #a1a1aa; border: 1px solid #3f3f46; }
+  .light .badge-green { background: #dcfce7; color: #166534; border-color: #86efac; }
+  .light .badge-yellow { background: #fef9c3; color: #854d0e; border-color: #fde047; }
+  .light .badge-red { background: #fee2e2; color: #991b1b; border-color: #fca5a5; }
+  .light .badge-blue { background: #dbeafe; color: #1e40af; border-color: #93c5fd; }
+  .light .badge-muted { background: #f4f4f5; color: #71717a; border-color: #d4d4d8; }
+  .tab-btn { padding: 8px 16px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; border: none; background: transparent; color: var(--muted); transition: all 0.2s; white-space: nowrap; }
+  .tab-btn:hover { color: var(--fg); background: var(--card); }
+  .tab-btn.active { color: var(--fg); background: var(--card); border: 1px solid var(--border); }
+  .tab-content { display: none; animation: fadeIn 0.2s ease; }
+  .tab-content.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+  .progress-bar { height: 6px; background: var(--border); border-radius: 9999px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 9999px; transition: width 0.5s ease; }
+  input[type="text"], input[type="number"], input[type="time"], select, textarea {
+    background: var(--bg); border: 1px solid var(--border); color: var(--fg); border-radius: 8px;
+    padding: 8px 12px; font-family: inherit; font-size: 14px; width: 100%; outline: none;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+  .checkbox-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
+  .checkbox-item:last-child { border-bottom: none; }
+  .checkbox-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--accent); cursor: pointer; flex-shrink: 0; }
+  .checkbox-item.done label { text-decoration: line-through; color: var(--muted); }
+  table { width: 100%; border-collapse: collapse; }
+  th { text-align: left; padding: 10px 12px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); border-bottom: 1px solid var(--border); }
+  td { padding: 12px; border-bottom: 1px solid var(--border); font-size: 14px; }
+  .frog-section { background: linear-gradient(135deg, #172554, #1e1b4b); border: 1px solid #312e81; border-radius: 12px; padding: 24px; }
+  .light .frog-section { background: linear-gradient(135deg, #eff6ff, #eef2ff); border-color: #c7d2fe; }
+  .stat-number { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; }
+  .reminder-card { background: linear-gradient(135deg, var(--card), transparent); border-left: 3px solid var(--accent); padding: 16px; border-radius: 0 8px 8px 0; }
+  .outreach-select { padding: 4px 8px; font-size: 13px; border-radius: 6px; }
+  .search-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; display: none; align-items: flex-start; justify-content: center; padding-top: 20vh; }
+  .search-overlay.active { display: flex; }
+  .search-box { background: var(--card); border: 1px solid var(--border); border-radius: 12px; width: 90%; max-width: 560px; overflow: hidden; }
+  .search-box input { border: none; border-radius: 0; padding: 16px 20px; font-size: 16px; background: transparent; }
+  .search-results { max-height: 300px; overflow-y: auto; border-top: 1px solid var(--border); }
+  .search-result { padding: 12px 20px; cursor: pointer; font-size: 14px; border-bottom: 1px solid var(--border); }
+  .search-result:hover { background: var(--border); }
+  @media (max-width: 768px) {
+    .stat-number { font-size: 22px; }
+    .card { padding: 14px; }
+    .tab-bar { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  }
+</style>
+<script>
+tailwind.config = {
+  darkMode: 'class',
+}
+</script>
+</head>
+<body>
+
+<div style="max-width: 1200px; margin: 0 auto; padding: 16px 20px;">
+  <!-- Header -->
+  <header style="display: flex; align-items: center; justify-content: space-between; padding: 12px 0 20px; border-bottom: 1px solid var(--border); margin-bottom: 20px;">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <div style="font-size: 28px;">🦉</div>
+      <div>
+        <h1 style="font-size: 20px; font-weight: 700; letter-spacing: -0.02em;">Mission Control</h1>
+        <p style="font-size: 13px; color: var(--muted);">Owen Coonahan — Prospector Labs</p>
+      </div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <button onclick="toggleSearch()" style="background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 6px 12px; color: var(--muted); font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+        <span>⌘K</span>
+      </button>
+      <button onclick="toggleTheme()" id="theme-toggle" style="background: var(--card); border: 1px solid var(--border); border-radius: 8px; width: 36px; height: 36px; cursor: pointer; font-size: 16px;">🌙</button>
+    </div>
+  </header>
+
+  <!-- Tab Bar -->
+  <nav class="tab-bar" style="display: flex; gap: 4px; margin-bottom: 24px; overflow-x: auto; padding-bottom: 4px;">
+    <button class="tab-btn active" onclick="switchTab('dashboard')">Dashboard</button>
+    <button class="tab-btn" onclick="switchTab('goals')">Goals</button>
+    <button class="tab-btn" onclick="switchTab('tasks')">Tasks</button>
+    <button class="tab-btn" onclick="switchTab('cron')">Automation</button>
+    <button class="tab-btn" onclick="switchTab('revenue')">Revenue</button>
+    <button class="tab-btn" onclick="switchTab('health')">Health</button>
+  </nav>
+
+  <!-- ==================== TAB 1: DASHBOARD ==================== -->
+  <div id="tab-dashboard" class="tab-content active">
+    <!-- Status Cards -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 24px;">
+      <div class="card-sm">
+        <div style="font-size: 12px; color: var(--muted); margin-bottom: 4px;">TODAY</div>
+        <div class="mono" style="font-size: 15px; font-weight: 600;" id="current-date"></div>
+        <div class="mono" style="font-size: 13px; color: var(--muted);" id="current-time"></div>
+      </div>
+      <div class="card-sm">
+        <div style="font-size: 12px; color: var(--muted); margin-bottom: 4px;">DAYS SINCE LAUNCH</div>
+        <div class="stat-number" id="days-since-launch"></div>
+        <div style="font-size: 12px; color: var(--muted);">Feb 5, 2026</div>
+      </div>
+      <div class="card-sm">
+        <div style="font-size: 12px; color: var(--muted); margin-bottom: 4px;">RUNWAY</div>
+        <div class="stat-number" style="color: #facc15;">⚠️</div>
+        <div style="font-size: 12px; color: var(--muted);">Burn mode — ship revenue</div>
+      </div>
+      <div class="card-sm">
+        <div style="font-size: 12px; color: var(--muted); margin-bottom: 4px;">CURRENT PHASE</div>
+        <div style="font-size: 15px; font-weight: 600;">Build + Sell</div>
+        <div style="font-size: 12px; color: var(--muted);">Validated, need revenue</div>
+      </div>
+    </div>
+
+    <!-- Frog Section -->
+    <div class="frog-section" style="margin-bottom: 24px;">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+        <span style="font-size: 24px;">🐸</span>
+        <span style="font-size: 18px; font-weight: 700;">Today's Frog</span>
+      </div>
+      <div style="font-size: 20px; font-weight: 600;">5 cold emails to PE targets</div>
+      <div style="font-size: 14px; color: #94a3b8; margin-top: 6px;">Eat it before 9am. Everything else is easier after this.</div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 24px;">
+      <div class="card-sm" style="text-align: center;">
+        <div class="stat-number mono">35,469</div>
+        <div style="font-size: 12px; color: var(--muted);">Queue Projects</div>
+      </div>
+      <div class="card-sm" style="text-align: center;">
+        <div class="stat-number mono">9</div>
+        <div style="font-size: 12px; color: var(--muted);">ISOs Covered</div>
+      </div>
+      <div class="card-sm" style="text-align: center;">
+        <div class="stat-number mono">12</div>
+        <div style="font-size: 12px; color: var(--muted);">Data Tools Shipped</div>
+      </div>
+      <div class="card-sm" style="text-align: center;">
+        <div class="stat-number mono">105+</div>
+        <div style="font-size: 12px; color: var(--muted);">News Sources</div>
+      </div>
+    </div>
+
+    <!-- Active Projects -->
+    <h2 style="font-size: 16px; font-weight: 600; margin-bottom: 14px;">Active Projects</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin-bottom: 24px;">
+
+      <div class="card-sm">
+        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+          <span style="font-weight: 600; font-size: 14px;">Interconnection DD for PE</span>
+          <span class="badge badge-red">Critical</span>
+        </div>
+        <div style="font-size: 13px; color: var(--muted); margin-bottom: 4px;">Status: Reports ready, need outreach</div>
+        <div style="font-size: 13px; color: var(--accent);">→ Send 5 cold emails today</div>
+      </div>
+
+      <div class="card-sm">
+        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+          <span style="font-weight: 600; font-size: 14px;">Queue API</span>
+          <span class="badge badge-green">Built</span>
+        </div>
+        <div style="font-size: 13px; color: var(--muted); margin-bottom: 4px;">FastAPI, 7 endpoints, scoring engine</div>
+        <div style="font-size: 13px; color: var(--accent);">→ Deploy to Railway</div>
+      </div>
+
+      <div class="card-sm">
+        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+          <span style="font-weight: 600; font-size: 14px;">Newsletter / Digest</span>
+          <span class="badge badge-yellow">In Progress</span>
+        </div>
+        <div style="font-size: 13px; color: var(--muted); margin-bottom: 4px;">Infrastructure built, 105+ sources mapped</div>
+        <div style="font-size: 13px; color: var(--accent);">→ Wire sources into ingest</div>
+      </div>
+
+      <div class="card-sm">
+        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+          <span style="font-weight: 600; font-size: 14px;">Critical Minerals Tracker</span>
+          <span class="badge badge-green">Shipped</span>
+        </div>
+        <div style="font-size: 13px; color: var(--muted); margin-bottom: 4px;">8 tabs, Mapbox, 50+ companies</div>
+        <div class="mono" style="font-size: 12px; color: var(--muted);">GitHub Pages + Vercel</div>
+      </div>
+
+      <div class="card-sm">
+        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+          <span style="font-weight: 600; font-size: 14px;">Prospector Data Tools</span>
+          <span class="badge badge-green">Shipped</span>
+        </div>
+        <div style="font-size: 13px; color: var(--muted); margin-bottom: 4px;">12 tools on GitHub Pages</div>
+        <div style="font-size: 13px; color: var(--muted);">12 weeks of content ready</div>
+      </div>
+
+      <div class="card-sm">
+        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+          <span style="font-weight: 600; font-size: 14px;">Energy News Monitor</span>
+          <span class="badge badge-blue">Running</span>
+        </div>
+        <div style="font-size: 13px; color: var(--muted); margin-bottom: 4px;">2-hourly ingest, daily digest</div>
+        <div style="font-size: 13px; color: var(--muted);">ISO scrapers + RSS feeds</div>
+      </div>
+
+      <div class="card-sm">
+        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+          <span style="font-weight: 600; font-size: 14px;">Podcast Intelligence</span>
+          <span class="badge badge-blue">Active</span>
+        </div>
+        <div style="font-size: 13px; color: var(--muted); margin-bottom: 4px;">25 episodes indexed</div>
+        <div style="font-size: 13px; color: var(--muted);">Columbia Energy + Energy Gang</div>
+      </div>
+
+      <div class="card-sm">
+        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+          <span style="font-weight: 600; font-size: 14px;">Content / Social</span>
+          <span class="badge badge-red">Not Started</span>
+        </div>
+        <div style="font-size: 13px; color: var(--muted); margin-bottom: 4px;">Twitter + LinkedIn posting</div>
+        <div style="font-size: 13px; color: var(--accent);">→ Start posting TODAY</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== TAB 2: GOALS ==================== -->
+  <div id="tab-goals" class="tab-content">
+    <!-- Vision -->
+    <h2 style="font-size: 16px; font-weight: 600; margin-bottom: 14px;">Vision</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-bottom: 28px;">
+      <div class="card">
+        <div style="font-size: 12px; color: var(--accent); font-weight: 600; margin-bottom: 8px;">6 MONTHS</div>
+        <p style="font-size: 14px; line-height: 1.6;">Validated offer, money coming in. Financial control and stability. Dating more, calling people more, feeling abundant.</p>
+      </div>
+      <div class="card">
+        <div style="font-size: 12px; color: #a78bfa; font-weight: 600; margin-bottom: 8px;">12 MONTHS</div>
+        <p style="font-size: 14px; line-height: 1.6;">Growing fast. Personal brand established. Long-term relationship. Great body. Maybe a coach. Spending on things that matter.</p>
+      </div>
+      <div class="card">
+        <div style="font-size: 12px; color: #f472b6; font-weight: 600; margin-bottom: 8px;">LIFE VISION</div>
+        <p style="font-size: 14px; line-height: 1.6;">Abundance and freedom. NYC or California. Family — kids, marriage. Travel. Projects that matter. Real estate portfolio. $10M+.</p>
+      </div>
+    </div>
+
+    <!-- Core Pillars -->
+    <h2 style="font-size: 16px; font-weight: 600; margin-bottom: 14px;">Core Pillars</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 28px;">
+      <div class="card-sm">
+        <div style="font-size: 20px; margin-bottom: 8px;">💰</div>
+        <div style="font-weight: 600; margin-bottom: 4px;">Financial Freedom</div>
+        <div style="font-size: 13px; color: var(--muted);">$25-50K/mo → $10M net worth</div>
+      </div>
+      <div class="card-sm">
+        <div style="font-size: 20px; margin-bottom: 8px;">❤️</div>
+        <div style="font-weight: 600; margin-bottom: 4px;">Relationships</div>
+        <div style="font-size: 13px; color: var(--muted);">Deep connections, partner, family</div>
+      </div>
+      <div class="card-sm">
+        <div style="font-size: 20px; margin-bottom: 8px;">💪</div>
+        <div style="font-weight: 600; margin-bottom: 4px;">Fitness</div>
+        <div style="font-size: 13px; color: var(--muted);">Chiseled Greek God. HYROX.</div>
+      </div>
+      <div class="card-sm">
+        <div style="font-size: 20px; margin-bottom: 8px;">📢</div>
+        <div style="font-weight: 600; margin-bottom: 4px;">Personal Brand</div>
+        <div style="font-size: 13px; color: var(--muted);">Cracked Data Guy — build in public</div>
+      </div>
+    </div>
+
+    <!-- Monthly Targets -->
+    <h2 style="font-size: 16px; font-weight: 600; margin-bottom: 14px;">Monthly Targets — February 2026</h2>
+    <div style="display: grid; gap: 16px; margin-bottom: 28px;">
+      <div class="card-sm">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+          <span style="font-size: 14px; font-weight: 500;">Revenue: First paying client</span>
+          <span class="mono" style="font-size: 13px; color: var(--muted);">$0 / $4K</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width: 0%; background: #f87171;"></div></div>
+      </div>
+      <div class="card-sm">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+          <span style="font-size: 14px; font-weight: 500;">Outreach: 20 PE firms contacted</span>
+          <span class="mono" style="font-size: 13px; color: var(--muted);">0 / 20</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width: 0%; background: #facc15;"></div></div>
+      </div>
+      <div class="card-sm">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+          <span style="font-size: 14px; font-weight: 500;">Content: 12 posts (3/week)</span>
+          <span class="mono" style="font-size: 13px; color: var(--muted);">0 / 12</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width: 0%; background: #60a5fa;"></div></div>
+      </div>
+      <div class="card-sm">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+          <span style="font-size: 14px; font-weight: 500;">Fitness: Daily workouts + HYROX</span>
+          <span class="mono" style="font-size: 13px; color: var(--muted);">On track</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width: 75%; background: #4ade80;"></div></div>
+      </div>
+    </div>
+
+    <!-- Reminders -->
+    <h2 style="font-size: 16px; font-weight: 600; margin-bottom: 14px;">Key Reminders</h2>
+    <div style="display: grid; gap: 10px;">
+      <div class="reminder-card">💡 Not everyone will criticize you like dad did. That's an old belief.</div>
+      <div class="reminder-card">🧘 Calm mind + full speed. Not one or the other — BOTH.</div>
+      <div class="reminder-card">🔧 I figure things out. Always have, always will.</div>
+      <div class="reminder-card">💰 $200/hr is my baseline — no justifying, no discounting.</div>
+      <div class="reminder-card">🎯 Ego is the enemy. Let the work speak.</div>
+      <div class="reminder-card">⚡ The grid is THE MOST IMPORTANT TECHNOLOGY. This work matters.</div>
+    </div>
+  </div>
+
+  <!-- ==================== TAB 3: TASKS ==================== -->
+  <div id="tab-tasks" class="tab-content">
+    <div id="tasks-container"></div>
+  </div>
+
+  <!-- ==================== TAB 4: CRON ==================== -->
+  <div id="tab-cron" class="tab-content">
+    <h2 style="font-size: 16px; font-weight: 600; margin-bottom: 14px;">Automations & Cron Jobs</h2>
+    <div class="card" style="overflow-x: auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Schedule</th>
+            <th>Last Run</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Energy News Ingest</td><td class="mono" style="font-size: 13px;">Every 2 hours</td><td style="color: var(--muted); font-size: 13px;">—</td><td><span class="badge badge-green">Active</span></td></tr>
+          <tr><td>Daily Energy Digest</td><td class="mono" style="font-size: 13px;">6:00 AM daily</td><td style="color: var(--muted); font-size: 13px;">Today 6:00 AM</td><td><span class="badge badge-green">Active</span></td></tr>
+          <tr><td>Morning Check-in</td><td class="mono" style="font-size: 13px;">7:30 AM daily</td><td style="color: var(--muted); font-size: 13px;">Today 7:30 AM</td><td><span class="badge badge-green">Active</span></td></tr>
+          <tr><td>Midday Breathwork Nudge</td><td class="mono" style="font-size: 13px;">1:00 PM daily</td><td style="color: var(--muted); font-size: 13px;">—</td><td><span class="badge badge-green">Active</span></td></tr>
+          <tr><td>Evening Reflection</td><td class="mono" style="font-size: 13px;">9:00 PM daily</td><td style="color: var(--muted); font-size: 13px;">—</td><td><span class="badge badge-green">Active</span></td></tr>
+          <tr><td>Queue Data Refresh</td><td class="mono" style="font-size: 13px;">6:00 AM daily</td><td style="color: var(--muted); font-size: 13px;">—</td><td><span class="badge badge-green">Active</span></td></tr>
+          <tr><td>Weekly Energy Report</td><td class="mono" style="font-size: 13px;">8:00 AM Sunday</td><td style="color: var(--muted); font-size: 13px;">—</td><td><span class="badge badge-green">Active</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ==================== TAB 5: REVENUE ==================== -->
+  <div id="tab-revenue" class="tab-content">
+    <!-- MRR -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 28px;">
+      <div class="card" style="text-align: center;">
+        <div style="font-size: 12px; color: var(--muted); margin-bottom: 4px;">CURRENT MRR</div>
+        <div class="stat-number mono" style="color: #f87171;">$0</div>
+        <div style="font-size: 12px; color: var(--muted);">Let's change this</div>
+      </div>
+      <div class="card" style="text-align: center;">
+        <div style="font-size: 12px; color: var(--muted); margin-bottom: 4px;">TARGET MRR</div>
+        <div class="stat-number mono" style="color: #4ade80;">$25-50K</div>
+        <div style="font-size: 12px; color: var(--muted);">5-10 PE clients</div>
+      </div>
+      <div class="card" style="text-align: center;">
+        <div style="font-size: 12px; color: var(--muted); margin-bottom: 4px;">PIPELINE</div>
+        <div class="stat-number mono" id="pipeline-count">0</div>
+        <div style="font-size: 12px; color: var(--muted);">Active conversations</div>
+      </div>
+    </div>
+
+    <!-- Revenue Model -->
+    <h2 style="font-size: 16px; font-weight: 600; margin-bottom: 14px;">Revenue Model</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 28px;">
+      <div class="card-sm">
+        <div style="font-weight: 600; margin-bottom: 4px;">DD Reports</div>
+        <div class="mono" style="color: var(--accent);">$4-8K each</div>
+        <div style="font-size: 13px; color: var(--muted); margin-top: 4px;">Per-project analysis for PE</div>
+      </div>
+      <div class="card-sm">
+        <div style="font-weight: 600; margin-bottom: 4px;">Monthly Retainers</div>
+        <div class="mono" style="color: var(--accent);">$6-8K/mo</div>
+        <div style="font-size: 13px; color: var(--muted); margin-top: 4px;">Ongoing pipeline analysis</div>
+      </div>
+      <div class="card-sm">
+        <div style="font-weight: 600; margin-bottom: 4px;">API Access</div>
+        <div class="mono" style="color: var(--muted);">Future</div>
+        <div style="font-size: 13px; color: var(--muted); margin-top: 4px;">Per-request pricing</div>
+      </div>
+      <div class="card-sm">
+        <div style="font-weight: 600; margin-bottom: 4px;">Newsletter</div>
+        <div class="mono" style="color: var(--muted);">Future</div>
+        <div style="font-size: 13px; color: var(--muted); margin-top: 4px;">Sponsorships + premium</div>
+      </div>
+    </div>
+
+    <!-- Outreach Tracker -->
+    <h2 style="font-size: 16px; font-weight: 600; margin-bottom: 14px;">PE Outreach Tracker</h2>
+    <div class="card" style="overflow-x: auto;">
+      <table id="outreach-table">
+        <thead>
+          <tr>
+            <th>Firm</th>
+            <th>Contact</th>
+            <th>Status</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody id="outreach-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ==================== TAB 6: HEALTH ==================== -->
+  <div id="tab-health" class="tab-content">
+    <!-- HYROX Countdown -->
+    <div class="frog-section" style="margin-bottom: 24px; text-align: center;">
+      <div style="font-size: 14px; color: #94a3b8; margin-bottom: 4px;">🏋️ HYROX DOUBLES — FEBRUARY 22</div>
+      <div id="hyrox-countdown" class="stat-number mono" style="font-size: 36px;"></div>
+      <div style="font-size: 13px; color: #94a3b8; margin-top: 4px;">Owen + brother. Leave it all on the floor.</div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-bottom: 24px;">
+      <!-- Daily Non-Negotiables -->
+      <div class="card">
+        <h3 style="font-size: 15px; font-weight: 600; margin-bottom: 12px;">Daily Non-Negotiables</h3>
+        <div id="daily-checklist"></div>
+      </div>
+
+      <!-- Sleep Tracker -->
+      <div class="card">
+        <h3 style="font-size: 15px; font-weight: 600; margin-bottom: 12px;">Sleep Tracker</h3>
+        <div style="display: grid; gap: 12px;">
+          <div>
+            <label style="font-size: 12px; color: var(--muted);">Bed Time</label>
+            <input type="time" id="sleep-bed" onchange="saveSleep()" value="22:30">
+          </div>
+          <div>
+            <label style="font-size: 12px; color: var(--muted);">Wake Time</label>
+            <input type="time" id="sleep-wake" onchange="saveSleep()" value="05:30">
+          </div>
+          <div style="text-align: center; padding: 12px; background: var(--bg); border-radius: 8px;">
+            <div style="font-size: 12px; color: var(--muted);">HOURS</div>
+            <div class="mono stat-number" id="sleep-hours">7.0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
+      <!-- Morning Routine -->
+      <div class="card">
+        <h3 style="font-size: 15px; font-weight: 600; margin-bottom: 12px;">Morning Routine</h3>
+        <div style="display: grid; gap: 8px;">
+          <div style="padding: 8px 12px; background: var(--bg); border-radius: 8px; font-size: 14px;">🧘 Breathwork + meditation</div>
+          <div style="padding: 8px 12px; background: var(--bg); border-radius: 8px; font-size: 14px;">🤸 Stretch + prime</div>
+          <div style="padding: 8px 12px; background: var(--bg); border-radius: 8px; font-size: 14px;">🏋️ Gym or WeWork</div>
+          <div style="padding: 8px 12px; background: var(--bg); border-radius: 8px; font-size: 14px;">🐸 Frog before 9am</div>
+        </div>
+      </div>
+
+      <!-- Body Goal -->
+      <div class="card">
+        <h3 style="font-size: 15px; font-weight: 600; margin-bottom: 12px;">Body Goal: Chiseled Greek God 🏛️</h3>
+        <div style="margin-bottom: 12px;">
+          <label style="font-size: 12px; color: var(--muted);">Current Weight (lbs)</label>
+          <input type="number" id="current-weight" onchange="saveWeight()" placeholder="Enter weight">
+        </div>
+        <div style="padding: 12px; background: var(--bg); border-radius: 8px; font-size: 13px; color: var(--muted);">
+          6'5" — train daily, eat clean, recover hard. The body follows the discipline.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer style="margin-top: 48px; padding: 20px 0; border-top: 1px solid var(--border); text-align: center;">
+    <div style="font-size: 14px; margin-bottom: 6px;">Sir Henry 🦉 — Mission Control for Owen Coonahan</div>
+    <div style="font-size: 12px; color: var(--muted); margin-bottom: 8px;">Last updated: <span id="footer-time"></span></div>
+    <div style="display: flex; justify-content: center; gap: 16px; font-size: 13px;">
+      <a href="https://owencoonahan.github.io/prospector-data-tools/" target="_blank" style="color: var(--accent); text-decoration: none;">Prospector Tools</a>
+      <a href="https://github.com/OwenCoonahan" target="_blank" style="color: var(--accent); text-decoration: none;">GitHub</a>
+      <a href="https://owencoonahan.xyz" target="_blank" style="color: var(--accent); text-decoration: none;">owencoonahan.xyz</a>
+    </div>
+  </footer>
+</div>
+
+<!-- Search Overlay -->
+<div class="search-overlay" id="search-overlay" onclick="if(event.target===this)toggleSearch()">
+  <div class="search-box">
+    <input type="text" id="search-input" placeholder="Search across all tabs..." oninput="handleSearch(this.value)">
+    <div class="search-results" id="search-results"></div>
+  </div>
+</div>
+
+<script>
+// ============ STATE ============
+const TASKS_DEFAULT = [
+  { id: 't1', text: '5 cold emails to PE targets', tier: 'critical', done: false },
+  { id: 't2', text: 'Start posting on Twitter/LinkedIn', tier: 'critical', done: false },
+  { id: 't3', text: 'Prospector Labs landing page', tier: 'critical', done: false },
+  { id: 't4', text: 'Glass Energy landing page', tier: 'critical', done: false },
+  { id: 't5', text: 'Deploy API to Railway', tier: 'important', done: false },
+  { id: 't6', text: 'Wire 65+ sources into news monitor', tier: 'important', done: false },
+  { id: 't7', text: 'First Prospector Weekly issue', tier: 'important', done: false },
+  { id: 't8', text: 'Expand queue database', tier: 'important', done: false },
+  { id: 't9', text: 'Personal site → Vercel', tier: 'important', done: false },
+  { id: 't10', text: 'MCP server wrapper for API', tier: 'backlog', done: false },
+  { id: 't11', text: 'Energy domain skill graph', tier: 'backlog', done: false },
+  { id: 't12', text: 'Google OAuth for calendar/email', tier: 'backlog', done: false },
+];
+
+const PE_FIRMS = [
+  { firm: 'LS Power', contact: '', status: 'not-contacted', notes: '' },
+  { firm: 'ECP', contact: '', status: 'not-contacted', notes: '' },
+  { firm: 'ArcLight Capital', contact: '', status: 'not-contacted', notes: '' },
+  { firm: 'Stonepeak', contact: '', status: 'not-contacted', notes: '' },
+  { firm: 'Bernhard Capital', contact: '', status: 'not-contacted', notes: '' },
+  { firm: 'Calera Capital', contact: '', status: 'not-contacted', notes: '' },
+  { firm: 'I Squared Capital', contact: '', status: 'not-contacted', notes: '' },
+];
+
+const DAILY_ITEMS = ['Read', 'Workout', 'Business / financials', 'Show up above the line'];
+
+// ============ LOAD STATE ============
+function loadState(key, fallback) {
+  try { const v = localStorage.getItem('mc_' + key); return v ? JSON.parse(v) : fallback; }
+  catch { return fallback; }
+}
+function saveState(key, val) { localStorage.setItem('mc_' + key, JSON.stringify(val)); }
+
+let tasks = loadState('tasks', TASKS_DEFAULT);
+// Ensure all default tasks exist
+TASKS_DEFAULT.forEach(dt => { if (!tasks.find(t => t.id === dt.id)) tasks.push(dt); });
+
+let outreach = loadState('outreach', PE_FIRMS);
+let dailyChecks = loadState('daily_' + new Date().toISOString().slice(0,10), DAILY_ITEMS.map(i => ({ text: i, done: false })));
+
+// ============ TABS ============
+function switchTab(name) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ============ THEME ============
+function toggleTheme() {
+  const html = document.documentElement;
+  const isLight = html.classList.toggle('light');
+  html.classList.toggle('dark', !isLight);
+  document.body.parentElement.className = isLight ? 'light' : 'dark';
+  document.getElementById('theme-toggle').textContent = isLight ? '☀️' : '🌙';
+  saveState('theme', isLight ? 'light' : 'dark');
+}
+const savedTheme = loadState('theme', 'dark');
+if (savedTheme === 'light') { document.documentElement.classList.remove('dark'); document.documentElement.classList.add('light'); document.getElementById('theme-toggle') && (document.getElementById('theme-toggle').textContent = '☀️'); }
+
+// ============ CLOCK ============
+function updateClock() {
+  const now = new Date();
+  const opts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  document.getElementById('current-date').textContent = now.toLocaleDateString('en-US', opts);
+  document.getElementById('current-time').textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  document.getElementById('footer-time').textContent = now.toLocaleString();
+
+  // Days since launch
+  const launch = new Date('2026-02-05');
+  const days = Math.floor((now - launch) / 86400000);
+  document.getElementById('days-since-launch').textContent = days;
+
+  // HYROX countdown
+  const hyrox = new Date('2026-02-22T08:00:00');
+  const diff = hyrox - now;
+  if (diff > 0) {
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    document.getElementById('hyrox-countdown').textContent = `${d}d ${h}h ${m}m`;
+  } else {
+    document.getElementById('hyrox-countdown').textContent = '🏆 RACE DAY';
+  }
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+// ============ TASKS ============
+function renderTasks() {
+  const container = document.getElementById('tasks-container');
+  const tiers = [
+    { key: 'critical', label: '🔴 Critical — This Week', color: '#f87171' },
+    { key: 'important', label: '🟡 Important — This Month', color: '#facc15' },
+    { key: 'backlog', label: '🟢 Backlog', color: '#4ade80' },
+  ];
+  container.innerHTML = tiers.map(tier => {
+    const items = tasks.filter(t => t.tier === tier.key);
+    return `
+      <div style="margin-bottom: 24px;">
+        <h2 style="font-size: 16px; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+          ${tier.label}
+          <span class="mono" style="font-size: 13px; color: var(--muted);">${items.filter(i=>i.done).length}/${items.length}</span>
+        </h2>
+        <div class="card">
+          ${items.map(t => `
+            <div class="checkbox-item ${t.done ? 'done' : ''}" onclick="toggleTask('${t.id}')">
+              <input type="checkbox" ${t.done ? 'checked' : ''} onclick="event.stopPropagation(); toggleTask('${t.id}')">
+              <label style="cursor: pointer; font-size: 14px;">${t.text}</label>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+function toggleTask(id) {
+  const t = tasks.find(t => t.id === id);
+  if (t) { t.done = !t.done; saveState('tasks', tasks); renderTasks(); }
+}
+renderTasks();
+
+// ============ OUTREACH ============
+function renderOutreach() {
+  const body = document.getElementById('outreach-body');
+  const statuses = ['not-contacted', 'reached-out', 'responded', 'meeting', 'client'];
+  const statusLabels = { 'not-contacted': 'Not Contacted', 'reached-out': 'Reached Out', 'responded': 'Responded', 'meeting': 'Meeting', 'client': 'Client ✅' };
+  const statusBadge = { 'not-contacted': 'badge-muted', 'reached-out': 'badge-yellow', 'responded': 'badge-blue', 'meeting': 'badge-green', 'client': 'badge-green' };
+
+  body.innerHTML = outreach.map((o, i) => `
+    <tr>
+      <td style="font-weight: 500;">${o.firm}</td>
+      <td><input type="text" value="${o.contact}" onchange="updateOutreach(${i},'contact',this.value)" placeholder="Contact name" style="width: 140px; padding: 4px 8px; font-size: 13px;"></td>
+      <td>
+        <select class="outreach-select" onchange="updateOutreach(${i},'status',this.value)" style="background: var(--bg); border: 1px solid var(--border); color: var(--fg);">
+          ${statuses.map(s => `<option value="${s}" ${o.status === s ? 'selected' : ''}>${statusLabels[s]}</option>`).join('')}
+        </select>
+      </td>
+      <td><input type="text" value="${o.notes}" onchange="updateOutreach(${i},'notes',this.value)" placeholder="Notes..." style="padding: 4px 8px; font-size: 13px;"></td>
+    </tr>
+  `).join('');
+
+  // Pipeline count
+  const active = outreach.filter(o => o.status !== 'not-contacted' && o.status !== 'client').length;
+  document.getElementById('pipeline-count').textContent = active;
+}
+function updateOutreach(i, field, val) {
+  outreach[i][field] = val;
+  saveState('outreach', outreach);
+  renderOutreach();
+}
+renderOutreach();
+
+// ============ DAILY CHECKLIST ============
+function renderDaily() {
+  const container = document.getElementById('daily-checklist');
+  container.innerHTML = dailyChecks.map((item, i) => `
+    <div class="checkbox-item ${item.done ? 'done' : ''}" onclick="toggleDaily(${i})">
+      <input type="checkbox" ${item.done ? 'checked' : ''} onclick="event.stopPropagation(); toggleDaily(${i})">
+      <label style="cursor: pointer; font-size: 14px;">${item.text}</label>
+    </div>
+  `).join('');
+}
+function toggleDaily(i) {
+  dailyChecks[i].done = !dailyChecks[i].done;
+  saveState('daily_' + new Date().toISOString().slice(0,10), dailyChecks);
+  renderDaily();
+}
+renderDaily();
+
+// ============ SLEEP ============
+function loadSleep() {
+  const saved = loadState('sleep_' + new Date().toISOString().slice(0,10), null);
+  if (saved) {
+    document.getElementById('sleep-bed').value = saved.bed || '22:30';
+    document.getElementById('sleep-wake').value = saved.wake || '05:30';
+  }
+  calcSleep();
+}
+function saveSleep() {
+  const bed = document.getElementById('sleep-bed').value;
+  const wake = document.getElementById('sleep-wake').value;
+  saveState('sleep_' + new Date().toISOString().slice(0,10), { bed, wake });
+  calcSleep();
+}
+function calcSleep() {
+  const bed = document.getElementById('sleep-bed').value;
+  const wake = document.getElementById('sleep-wake').value;
+  if (!bed || !wake) return;
+  let [bh, bm] = bed.split(':').map(Number);
+  let [wh, wm] = wake.split(':').map(Number);
+  let hours = (wh + wm/60) - (bh + bm/60);
+  if (hours < 0) hours += 24;
+  document.getElementById('sleep-hours').textContent = hours.toFixed(1);
+}
+loadSleep();
+
+// ============ WEIGHT ============
+const savedWeight = loadState('weight', '');
+if (savedWeight) document.getElementById('current-weight').value = savedWeight;
+function saveWeight() { saveState('weight', document.getElementById('current-weight').value); }
+
+// ============ SEARCH ============
+const searchables = [
+  ...TASKS_DEFAULT.map(t => ({ text: t.text, tab: 'tasks', tier: t.tier })),
+  ...PE_FIRMS.map(f => ({ text: f.firm, tab: 'revenue', tier: 'PE Target' })),
+  { text: 'Energy News Ingest', tab: 'cron', tier: 'Automation' },
+  { text: 'Daily Energy Digest', tab: 'cron', tier: 'Automation' },
+  { text: 'Morning Check-in', tab: 'cron', tier: 'Automation' },
+  { text: 'HYROX countdown', tab: 'health', tier: 'Health' },
+  { text: 'Interconnection DD for PE', tab: 'dashboard', tier: 'Project' },
+  { text: 'Queue API', tab: 'dashboard', tier: 'Project' },
+  { text: 'Critical Minerals Tracker', tab: 'dashboard', tier: 'Project' },
+  { text: 'Prospector Data Tools', tab: 'dashboard', tier: 'Project' },
+  { text: 'Newsletter Digest', tab: 'dashboard', tier: 'Project' },
+  { text: 'Podcast Intelligence', tab: 'dashboard', tier: 'Project' },
+  { text: 'Financial Freedom', tab: 'goals', tier: 'Pillar' },
+  { text: 'Calm mind full speed', tab: 'goals', tier: 'Reminder' },
+];
+
+function toggleSearch() {
+  const el = document.getElementById('search-overlay');
+  el.classList.toggle('active');
+  if (el.classList.contains('active')) {
+    document.getElementById('search-input').value = '';
+    document.getElementById('search-results').innerHTML = '';
+    setTimeout(() => document.getElementById('search-input').focus(), 100);
+  }
+}
+function handleSearch(q) {
+  const results = document.getElementById('search-results');
+  if (!q) { results.innerHTML = ''; return; }
+  const matches = searchables.filter(s => s.text.toLowerCase().includes(q.toLowerCase()));
+  results.innerHTML = matches.slice(0, 8).map(m => `
+    <div class="search-result" onclick="goToResult('${m.tab}')">
+      <span style="color: var(--muted); font-size: 12px;">${m.tier}</span> — ${m.text}
+    </div>
+  `).join('') || '<div style="padding: 16px; color: var(--muted); font-size: 14px;">No results</div>';
+}
+function goToResult(tab) {
+  toggleSearch();
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(btn => { if (btn.textContent.toLowerCase().includes(tab.slice(0,4))) btn.classList.add('active'); });
+}
+
+// Cmd+K
+document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); toggleSearch(); }
+  if (e.key === 'Escape') { document.getElementById('search-overlay').classList.remove('active'); }
+});
+</script>
+</body>
+</html>
