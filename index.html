@@ -45,6 +45,18 @@
   .checkbox-item:last-child { border-bottom: none; }
   .checkbox-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--accent); cursor: pointer; flex-shrink: 0; }
   .checkbox-item.done label { text-decoration: line-through; color: var(--muted); }
+  .cron-view-btn { background: var(--bg); border: 1px solid var(--border); color: var(--accent); border-radius: 6px; padding: 4px 10px; font-size: 12px; font-family: inherit; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+  .cron-view-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 100; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+  .modal-overlay.show { display: flex; }
+  .modal-content { background: var(--card); border: 1px solid var(--border); border-radius: 16px; width: 90%; max-width: 700px; max-height: 80vh; overflow: hidden; display: flex; flex-direction: column; animation: fadeIn 0.2s ease; }
+  .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px solid var(--border); }
+  .modal-header h3 { font-size: 15px; font-weight: 600; }
+  .modal-close { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 20px; padding: 4px 8px; border-radius: 6px; }
+  .modal-close:hover { color: var(--fg); background: var(--border); }
+  .modal-body { padding: 20px; overflow-y: auto; flex: 1; }
+  .modal-body pre { font-family: 'Geist Mono', monospace; font-size: 13px; line-height: 1.6; white-space: pre-wrap; word-break: break-word; color: var(--fg); }
+  .modal-body .empty-state { text-align: center; color: var(--muted); padding: 40px 0; }
   table { width: 100%; border-collapse: collapse; }
   th { text-align: left; padding: 10px 12px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); border-bottom: 1px solid var(--border); }
   td { padding: 12px; border-bottom: 1px solid var(--border); font-size: 14px; }
@@ -342,16 +354,17 @@ tailwind.config = {
             <th>Schedule</th>
             <th>Last Run</th>
             <th>Status</th>
+            <th>Output</th>
           </tr>
         </thead>
         <tbody>
-          <tr><td>Energy News Ingest</td><td class="mono" style="font-size: 13px;">Every 2 hours</td><td style="color: var(--muted); font-size: 13px;">—</td><td><span class="badge badge-green">Active</span></td></tr>
-          <tr><td>Daily Energy Digest</td><td class="mono" style="font-size: 13px;">6:00 AM daily</td><td style="color: var(--muted); font-size: 13px;">Today 6:00 AM</td><td><span class="badge badge-green">Active</span></td></tr>
-          <tr><td>Morning Check-in</td><td class="mono" style="font-size: 13px;">7:30 AM daily</td><td style="color: var(--muted); font-size: 13px;">Today 7:30 AM</td><td><span class="badge badge-green">Active</span></td></tr>
-          <tr><td>Midday Breathwork Nudge</td><td class="mono" style="font-size: 13px;">1:00 PM daily</td><td style="color: var(--muted); font-size: 13px;">—</td><td><span class="badge badge-green">Active</span></td></tr>
-          <tr><td>Evening Reflection</td><td class="mono" style="font-size: 13px;">9:00 PM daily</td><td style="color: var(--muted); font-size: 13px;">—</td><td><span class="badge badge-green">Active</span></td></tr>
-          <tr><td>Queue Data Refresh</td><td class="mono" style="font-size: 13px;">6:00 AM daily</td><td style="color: var(--muted); font-size: 13px;">—</td><td><span class="badge badge-green">Active</span></td></tr>
-          <tr><td>Weekly Energy Report</td><td class="mono" style="font-size: 13px;">8:00 AM Sunday</td><td style="color: var(--muted); font-size: 13px;">—</td><td><span class="badge badge-green">Active</span></td></tr>
+          <tr><td>Energy News Ingest</td><td class="mono" style="font-size: 13px;">Every 2 hours</td><td style="color: var(--muted); font-size: 13px;">—</td><td><span class="badge badge-green">Active</span></td><td><button class="cron-view-btn" onclick="showCronOutput('energy-ingest')">View Latest</button></td></tr>
+          <tr><td>Daily Energy Digest</td><td class="mono" style="font-size: 13px;">6:00 AM daily</td><td style="color: var(--muted); font-size: 13px;">Today 6:00 AM</td><td><span class="badge badge-green">Active</span></td><td><button class="cron-view-btn" onclick="showCronOutput('daily-digest')">View Latest</button></td></tr>
+          <tr><td>Morning Check-in</td><td class="mono" style="font-size: 13px;">7:30 AM daily</td><td style="color: var(--muted); font-size: 13px;">Today 7:30 AM</td><td><span class="badge badge-green">Active</span></td><td><button class="cron-view-btn" onclick="showCronOutput('morning-checkin')">View Latest</button></td></tr>
+          <tr><td>Midday Breathwork Nudge</td><td class="mono" style="font-size: 13px;">1:00 PM daily</td><td style="color: var(--muted); font-size: 13px;">—</td><td><span class="badge badge-green">Active</span></td><td><button class="cron-view-btn" onclick="showCronOutput('breathwork')">View Latest</button></td></tr>
+          <tr><td>Evening Reflection</td><td class="mono" style="font-size: 13px;">9:00 PM daily</td><td style="color: var(--muted); font-size: 13px;">—</td><td><span class="badge badge-green">Active</span></td><td><button class="cron-view-btn" onclick="showCronOutput('evening-reflection')">View Latest</button></td></tr>
+          <tr><td>Queue Data Refresh</td><td class="mono" style="font-size: 13px;">6:00 AM daily</td><td style="color: var(--muted); font-size: 13px;">—</td><td><span class="badge badge-green">Active</span></td><td><button class="cron-view-btn" onclick="showCronOutput('queue-refresh')">View Latest</button></td></tr>
+          <tr><td>Weekly Energy Report</td><td class="mono" style="font-size: 13px;">8:00 AM Sunday</td><td style="color: var(--muted); font-size: 13px;">—</td><td><span class="badge badge-green">Active</span></td><td><button class="cron-view-btn" onclick="showCronOutput('weekly-report')">View Latest</button></td></tr>
         </tbody>
       </table>
     </div>
@@ -755,8 +768,65 @@ function goToResult(tab) {
 // Cmd+K
 document.addEventListener('keydown', e => {
   if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); toggleSearch(); }
-  if (e.key === 'Escape') { document.getElementById('search-overlay').classList.remove('active'); }
+  if (e.key === 'Escape') { 
+    document.getElementById('search-overlay').classList.remove('active');
+    document.getElementById('cron-modal').classList.remove('show');
+  }
 });
+
+// Cron Output Viewer
+const cronOutputs = {
+  'energy-ingest': {
+    name: 'Energy News Ingest',
+    output: `Last run: Feb 18, 2026 10:00 AM EST\nStatus: ✅ Success\n\nIngested 47 articles from 6 sources:\n  • Utility Dive: 12 articles\n  • Energy Storage News: 8 articles\n  • PV Magazine: 7 articles\n  • Infrastructure Investor: 6 articles\n  • PE Hub: 5 articles\n  • ISO scrapers: 9 articles\n\nNew articles since last ingest: 11\nDatabase total: 2,847 articles`
+  },
+  'daily-digest': {
+    name: 'Daily Energy Digest',
+    output: `Last run: Feb 18, 2026 6:00 AM EST\nStatus: ✅ Delivered to Telegram\n\n⚡ Daily Energy Digest — Feb 18\n47 articles | 19 PE deals\n\nTop 5 Headlines:\n1. PJM board approves $11.8B transmission expansion plan\n2. Data center flexibility's long-term grid impacts (Latitude Media)\n3. Apollo, Blackstone, KKR betting heavy on DC infrastructure\n4. Vision Ridge closes SAF IV at $2.4B\n5. California batteries sustain near 24-hour solar run\n\nQuick takes:\n• Australia: 4.9 GWh grid-scale batteries in 2025\n• Adani: $100B AI data centers in India\n• 12 European PPAs for 724 MW in January`
+  },
+  'morning-checkin': {
+    name: 'Morning Check-in',
+    output: `Last run: Feb 18, 2026 7:30 AM EST\nStatus: ✅ Delivered to Telegram\n\nPrompts sent:\n  🧠 Brain dump\n  🙏 3 gratitudes\n  🏆 3 wins from yesterday\n  🐸 Today's frog\n  📍 WeWork or home?\n\nResponse received: ✅ (voice note, 5:11 duration)\nTranscribed via local Whisper\n\nFrog identified: 5 cold emails to PE targets`
+  },
+  'breathwork': {
+    name: 'Midday Breathwork Nudge',
+    output: `Last run: Feb 17, 2026 1:00 PM EST\nStatus: ✅ Delivered\n\nNext run: Today 1:00 PM EST`
+  },
+  'evening-reflection': {
+    name: 'Evening Reflection',
+    output: `Last run: Feb 17, 2026 9:00 PM EST\nStatus: ✅ Delivered\n\nPrompts sent:\n  📝 What did you accomplish today?\n  🎯 Did you eat the frog?\n  💭 What's on your mind?\n  🌙 Tomorrow's top priority?\n\nNext run: Today 9:00 PM EST`
+  },
+  'queue-refresh': {
+    name: 'Queue Data Refresh',
+    output: `Last run: Feb 18, 2026 6:00 AM EST\nStatus: ✅ Success\n\nDatabase: queue.db\nTotal projects: 35,469\nRegions: MISO | PJM | West | SPP | ERCOT | CAISO | ISO-NE | Southeast | NYISO\n\nChanges since last refresh:\n  • 0 new projects added\n  • 0 status changes detected\n\nNote: PJM cycle + serial data updated Feb 17\nPJM API key: pending (applied at dataminer2.pjm.com)`
+  },
+  'weekly-report': {
+    name: 'Weekly Energy Report',
+    output: `Last run: Feb 16, 2026 8:00 AM EST\nStatus: ✅ Generated\n\nWeekly summary: 312 articles processed\nTop themes:\n  1. Data center power demand (67 mentions)\n  2. Battery storage deployment (45 mentions)\n  3. Transmission buildout (38 mentions)\n  4. PE deal activity (31 mentions)\n  5. Critical minerals supply (24 mentions)\n\nNext run: Sunday Feb 23, 8:00 AM EST`
+  }
+};
+
+function showCronOutput(jobId) {
+  const job = cronOutputs[jobId];
+  if (!job) return;
+  document.getElementById('cron-modal-title').textContent = job.name;
+  document.getElementById('cron-modal-output').textContent = job.output;
+  document.getElementById('cron-modal').classList.add('show');
+}
 </script>
+
+<!-- Cron Output Modal -->
+<div id="cron-modal" class="modal-overlay" onclick="if(event.target===this)this.classList.remove('show')">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 id="cron-modal-title">Cron Output</h3>
+      <button class="modal-close" onclick="document.getElementById('cron-modal').classList.remove('show')">✕</button>
+    </div>
+    <div class="modal-body">
+      <pre id="cron-modal-output"></pre>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
