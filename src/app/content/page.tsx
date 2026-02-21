@@ -23,12 +23,12 @@ interface ContentItem {
 }
 
 const COLUMNS = [
-  { id: 'ideas', title: '💡 Ideas', color: 'border-violet-500/30' },
-  { id: 'scripting', title: '✍️ Scripting', color: 'border-blue-500/30' },
-  { id: 'thumbnail', title: '🎨 Thumbnail', color: 'border-orange-500/30' },
-  { id: 'filming', title: '🎬 Filming', color: 'border-yellow-500/30' },
-  { id: 'editing', title: '✂️ Editing', color: 'border-emerald-500/30' },
-  { id: 'published', title: '🚀 Published', color: 'border-green-500/30' },
+  { id: 'ideas', title: '💡 Ideas', color: 'border-yellow-500/30', headerBg: 'bg-yellow-500/10', headerText: 'text-yellow-400' },
+  { id: 'scripting', title: '✍️ Scripting', color: 'border-blue-500/30', headerBg: 'bg-blue-500/10', headerText: 'text-blue-400' },
+  { id: 'thumbnail', title: '🎨 Thumbnail', color: 'border-purple-500/30', headerBg: 'bg-purple-500/10', headerText: 'text-purple-400' },
+  { id: 'filming', title: '🎬 Filming', color: 'border-red-500/30', headerBg: 'bg-red-500/10', headerText: 'text-red-400' },
+  { id: 'editing', title: '✂️ Editing', color: 'border-pink-500/30', headerBg: 'bg-pink-500/10', headerText: 'text-pink-400' },
+  { id: 'published', title: '🚀 Published', color: 'border-green-500/30', headerBg: 'bg-green-500/10', headerText: 'text-green-400' },
 ] as const
 
 const PLATFORM_ICONS = {
@@ -217,14 +217,22 @@ export default function ContentPage() {
       {/* Kanban Board */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         {COLUMNS.map(col => (
-          <div key={col.id} className="flex flex-col">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-semibold text-zinc-300">{col.title}</h3>
-              <Badge variant="secondary" className="bg-zinc-800 text-zinc-500 text-xs">
-                {getColumnItems(col.id).length}
-              </Badge>
+          <Card key={col.id} className="bg-zinc-900 border-zinc-800 hover:border-zinc-700 transition-colors flex flex-col">
+            <div className={`flex items-center justify-between px-3 py-2.5 rounded-t-xl ${col.headerBg} border-b ${col.color}`}>
+              <h3 className={`text-sm font-semibold ${col.headerText}`}>{col.title}</h3>
+              <div className="flex items-center gap-1.5">
+                <Badge variant="secondary" className="bg-zinc-800/50 text-zinc-400 text-xs">
+                  {getColumnItems(col.id).length}
+                </Badge>
+                <button
+                  onClick={() => { setNewItem({ ...newItem, status: col.id }); setIsDialogOpen(true) }}
+                  className="w-5 h-5 rounded flex items-center justify-center text-zinc-500 hover:text-white hover:bg-zinc-700 transition-colors"
+                >
+                  <Plus className="h-3.5 w-3.5" />
+                </button>
+              </div>
             </div>
-            <div className={`space-y-2 min-h-[200px] border-t-2 ${col.color} pt-3`}>
+            <div className="space-y-2 min-h-[200px] p-2 flex-1">
               {getColumnItems(col.id).map(item => {
                 const PlatformIcon = PLATFORM_ICONS[item.platform]
                 return (
@@ -262,8 +270,13 @@ export default function ContentPage() {
                   </Card>
                 )
               })}
+              {getColumnItems(col.id).length === 0 && (
+                <div className="flex items-center justify-center h-24 text-zinc-600 text-xs text-center px-2">
+                  No items yet
+                </div>
+              )}
             </div>
-          </div>
+          </Card>
         ))}
       </div>
     </div>
