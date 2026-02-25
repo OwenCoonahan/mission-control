@@ -1,0 +1,121 @@
+{
+  "projects": [
+    {
+      "id": "pe-dd",
+      "title": "PE Due Diligence Service",
+      "emoji": "💰",
+      "status": "active",
+      "priority": "P0",
+      "description": "Sell interconnection DD reports to PE firms. First revenue.",
+      "endState": "1 paying client, 1 delivered report, $5K+ invoice sent",
+      "progress": 15,
+      "dueDate": "2026-03-31",
+      "milestones": [
+        { "id": "m1", "title": "Reply to all warm leads", "done": false, "dueDate": "2026-02-26" },
+        { "id": "m2", "title": "Send 5 cold emails to PE list", "done": false, "dueDate": "2026-02-28" },
+        { "id": "m3", "title": "Book first call", "done": false, "dueDate": "2026-03-05" },
+        { "id": "m4", "title": "Send free risk snapshot to 1 firm", "done": false, "dueDate": "2026-03-07" },
+        { "id": "m5", "title": "Close first paid engagement", "done": false, "dueDate": "2026-03-21" },
+        { "id": "m6", "title": "Deliver report + invoice", "done": false, "dueDate": "2026-03-31" }
+      ],
+      "blockers": ["Haven't replied to Sharad Goenka (5+ days)", "No cold emails sent yet"]
+    },
+    {
+      "id": "developer-scorecard",
+      "title": "Developer Scorecard (Lead Magnet #1)",
+      "emoji": "📊",
+      "status": "active",
+      "priority": "P0",
+      "description": "Ship as first public tool. Real data, real ICP, real leads.",
+      "endState": "Live on prospectorlabs.io with email gate, posted on LinkedIn, 50+ signups in first week",
+      "progress": 75,
+      "dueDate": "2026-03-03",
+      "milestones": [
+        { "id": "m1", "title": "Dashboard working with real data (35K projects)", "done": true, "dueDate": "2026-02-20" },
+        { "id": "m2", "title": "Add email capture gate (top 10 free, full access behind email)", "done": false, "dueDate": "2026-02-27" },
+        { "id": "m3", "title": "Connect to prospectorlabs.io domain", "done": false, "dueDate": "2026-02-28" },
+        { "id": "m4", "title": "Write LinkedIn post with hook + screenshot", "done": false, "dueDate": "2026-02-28" },
+        { "id": "m5", "title": "Post on LinkedIn", "done": false, "dueDate": "2026-03-01" },
+        { "id": "m6", "title": "DM to 10 PE/energy people with link", "done": false, "dueDate": "2026-03-03" }
+      ],
+      "blockers": ["DNS not switched from Framer yet"]
+    },
+    {
+      "id": "critical-minerals",
+      "title": "Critical Minerals Tracker (Lead Magnet #2)",
+      "emoji": "🌍",
+      "status": "active",
+      "priority": "P1",
+      "description": "Supply chain intelligence dashboard. Viral potential.",
+      "endState": "Live on prospectorlabs.io, posted on LinkedIn + Twitter, shared in energy/defense communities",
+      "progress": 80,
+      "dueDate": "2026-03-10",
+      "milestones": [
+        { "id": "m1", "title": "Dashboard live with real USGS data", "done": true, "dueDate": "2026-02-17" },
+        { "id": "m2", "title": "Add email capture CTA", "done": false, "dueDate": "2026-03-05" },
+        { "id": "m3", "title": "Write LinkedIn post", "done": false, "dueDate": "2026-03-06" },
+        { "id": "m4", "title": "Post on LinkedIn + Twitter", "done": false, "dueDate": "2026-03-08" },
+        { "id": "m5", "title": "Share in r/energy, Energy Twitter, relevant Discords", "done": false, "dueDate": "2026-03-10" }
+      ],
+      "blockers": []
+    },
+    {
+      "id": "prospector-site",
+      "title": "ProspectorLabs.io Migration",
+      "emoji": "🏠",
+      "status": "active",
+      "priority": "P1",
+      "description": "Move from Framer to GitHub Pages/Vercel. Save cost, own the code.",
+      "endState": "prospectorlabs.io serves variant-editorial site with all product pages, tools linked, email capture on every page",
+      "progress": 40,
+      "dueDate": "2026-03-01",
+      "milestones": [
+        { "id": "m1", "title": "Variant editorial site built", "done": true, "dueDate": "2026-02-24" },
+        { "id": "m2", "title": "Product landing pages built (7 pages)", "done": true, "dueDate": "2026-02-24" },
+        { "id": "m3", "title": "Update DNS (remove Framer, add GitHub Pages/Vercel)", "done": false, "dueDate": "2026-02-26" },
+        { "id": "m4", "title": "Add email capture forms (Tally.so) to every page", "done": false, "dueDate": "2026-02-28" },
+        { "id": "m5", "title": "Verify all links work on new domain", "done": false, "dueDate": "2026-03-01" }
+      ],
+      "blockers": ["DNS changes in progress"]
+    },
+    {
+      "id": "content-engine",
+      "title": "Content Engine (LinkedIn + Twitter)",
+      "emoji": "📢",
+      "status": "not-started",
+      "priority": "P0",
+      "description": "4 posts/week. Build following. Drive inbound.",
+      "endState": "Consistent 4 posts/week, 500+ LinkedIn connections in energy/PE, inbound DMs from prospects",
+      "progress": 0,
+      "dueDate": "2026-03-31",
+      "milestones": [
+        { "id": "m1", "title": "Post Developer Scorecard (LinkedIn)", "done": false, "dueDate": "2026-03-01" },
+        { "id": "m2", "title": "Post Critical Minerals (LinkedIn)", "done": false, "dueDate": "2026-03-08" },
+        { "id": "m3", "title": "Post queue data thread (Twitter)", "done": false, "dueDate": "2026-03-05" },
+        { "id": "m4", "title": "Post Supply Chain Risk (LinkedIn)", "done": false, "dueDate": "2026-03-15" },
+        { "id": "m5", "title": "Reach 4 posts/week cadence", "done": false, "dueDate": "2026-03-15" },
+        { "id": "m6", "title": "500+ energy/PE LinkedIn connections", "done": false, "dueDate": "2026-03-31" }
+      ],
+      "blockers": ["Haven't posted anything yet"]
+    },
+    {
+      "id": "financial-systems",
+      "title": "Financial Systems & Audit",
+      "emoji": "🏦",
+      "status": "not-started",
+      "priority": "P2",
+      "description": "Full financial clarity. Budget, runway, savings targets.",
+      "endState": "Know exact burn rate, runway, monthly budget. Tracking system in place.",
+      "progress": 0,
+      "dueDate": "2026-03-07",
+      "milestones": [
+        { "id": "m1", "title": "List all income sources + amounts", "done": false, "dueDate": "2026-03-01" },
+        { "id": "m2", "title": "List all expenses (monthly breakdown)", "done": false, "dueDate": "2026-03-01" },
+        { "id": "m3", "title": "Calculate runway (months at current burn)", "done": false, "dueDate": "2026-03-03" },
+        { "id": "m4", "title": "Set monthly budget + savings target", "done": false, "dueDate": "2026-03-05" },
+        { "id": "m5", "title": "Review IRA allocation strategy", "done": false, "dueDate": "2026-03-07" }
+      ],
+      "blockers": []
+    }
+  ]
+}
