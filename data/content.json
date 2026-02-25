@@ -1,1 +1,76 @@
-{"items":[]}
+{
+  "content": [
+    {
+      "id": "c1",
+      "title": "Developer Scorecard — 6,271 developers ranked",
+      "platform": "LinkedIn",
+      "stage": "scripting",
+      "hook": "I analyzed 35,000 interconnection queue projects and ranked 6,271 energy developers by track record.",
+      "tool": "developer-scorecard",
+      "createdAt": "2026-02-25"
+    },
+    {
+      "id": "c2",
+      "title": "Critical Minerals Tracker — U.S. supply chain exposure",
+      "platform": "LinkedIn",
+      "stage": "ideas",
+      "hook": "China controls 90%+ of rare earth processing. I built a dashboard tracking exactly how exposed the U.S. is.",
+      "tool": "critical-minerals-tracker",
+      "createdAt": "2026-02-25"
+    },
+    {
+      "id": "c3",
+      "title": "Supply Chain Risk Intelligence dashboard",
+      "platform": "LinkedIn",
+      "stage": "ideas",
+      "hook": "Which critical minerals have the highest geopolitical risk? Built a dashboard scoring 10 minerals across 5 risk dimensions.",
+      "tool": "supply-chain-risk",
+      "createdAt": "2026-02-25"
+    },
+    {
+      "id": "c4",
+      "title": "Queue data thread — what the interconnection backlog really looks like",
+      "platform": "Twitter",
+      "stage": "ideas",
+      "hook": "There are 35,000 projects waiting in US interconnection queues. Most will never get built. Here's the data.",
+      "tool": "queue-lookup",
+      "createdAt": "2026-02-25"
+    },
+    {
+      "id": "c5",
+      "title": "PPA Database — who's buying clean energy",
+      "platform": "LinkedIn",
+      "stage": "ideas",
+      "hook": "Amazon, Google, GM, Ford — who's actually signing power purchase agreements? Built a tracker.",
+      "tool": "ppa-database",
+      "createdAt": "2026-02-25"
+    },
+    {
+      "id": "c6",
+      "title": "Equipment Lead Time Index — transformer crisis",
+      "platform": "LinkedIn",
+      "stage": "ideas",
+      "hook": "Transformer lead times are at 212 on our index (baseline 100). The grid can't be built fast enough.",
+      "tool": "equipment-lead-time",
+      "createdAt": "2026-02-25"
+    },
+    {
+      "id": "c7",
+      "title": "What PE firms miss in energy due diligence",
+      "platform": "LinkedIn",
+      "stage": "ideas",
+      "hook": "Most PE energy DD misses interconnection risk entirely. Here's why it matters and what to look for.",
+      "tool": null,
+      "createdAt": "2026-02-25"
+    },
+    {
+      "id": "c8",
+      "title": "Build-in-public: How I built an energy data platform in 3 weeks",
+      "platform": "Twitter",
+      "stage": "ideas",
+      "hook": "3 weeks ago I had an idea. Now I have 12 live data tools, an API with 96 endpoints, and 35K projects indexed.",
+      "tool": null,
+      "createdAt": "2026-02-25"
+    }
+  ]
+}

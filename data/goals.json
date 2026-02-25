@@ -1,27 +1,27 @@
 {
   "goals": [
     {
-      "id": "mind",
-      "title": "Calm Mind",
-      "emoji": "🧘",
-      "description": "Less caffeine, deep breathing, deliberate time",
-      "progress": 75,
-      "color": "violet"
-    },
-    {
-      "id": "business",
-      "title": "Grow Business",
-      "emoji": "📈",
-      "description": "Do what moves the needle. Execute the playbook.",
-      "progress": 58,
+      "id": "revenue",
+      "title": "$5K Revenue by March 31",
+      "emoji": "💰",
+      "description": "First paying client. One report. One deal closed.",
+      "progress": 5,
       "color": "emerald"
     },
     {
-      "id": "body",
-      "title": "Greek God Body",
-      "emoji": "💪",
-      "description": "Eat and workout with discipline",
-      "progress": 68,
+      "id": "pipeline",
+      "title": "10 Active Conversations",
+      "emoji": "📞",
+      "description": "Reply to warm leads, send cold emails, book calls.",
+      "progress": 10,
+      "color": "violet"
+    },
+    {
+      "id": "content",
+      "title": "4 Posts/Week Cadence",
+      "emoji": "📢",
+      "description": "LinkedIn + Twitter. Developer Scorecard first. Build following.",
+      "progress": 0,
       "color": "orange"
     }
   ]

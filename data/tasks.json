@@ -1,136 +1,174 @@
 {
   "tasks": [
     {
-      "id": "1",
-      "title": "OpenClaw presentation (4-5 PM)",
-      "goal": "business",
-      "status": "done",
+      "id": "t1",
+      "title": "Reply to Sharad Goenka (Mazama Energy)",
+      "goal": "pipeline",
+      "status": "today",
       "priority": "frog",
-      "dueDate": "2026-02-13",
-      "completed": true,
-      "completedAt": "2026-02-13T17:59:53.191Z",
-      "updatedAt": "2026-02-13T17:59:53.191Z"
-    },
-    {
-      "id": "2",
-      "title": "Send 5 outreach messages",
-      "goal": "business",
-      "status": "today",
-      "priority": "high",
-      "dueDate": "2026-02-13",
+      "dueDate": "2026-02-25",
       "completed": false,
       "completedAt": null
     },
     {
-      "id": "3",
-      "title": "Data ingestion + PDF generation",
-      "goal": "business",
+      "id": "t2",
+      "title": "Reply to Harshwardhan Wadikar",
+      "goal": "pipeline",
       "status": "today",
       "priority": "high",
-      "dueDate": "2026-02-13",
+      "dueDate": "2026-02-25",
       "completed": false,
       "completedAt": null
     },
     {
-      "id": "4",
-      "title": "20 min meditation session",
-      "goal": "mind",
+      "id": "t3",
+      "title": "Follow up Kyle Campbell + Matt Warren",
+      "goal": "pipeline",
       "status": "today",
+      "priority": "high",
+      "dueDate": "2026-02-26",
+      "completed": false,
+      "completedAt": null
+    },
+    {
+      "id": "t4",
+      "title": "Post Developer Scorecard on LinkedIn",
+      "goal": "content",
+      "status": "today",
+      "priority": "high",
+      "dueDate": "2026-02-26",
+      "completed": false,
+      "completedAt": null
+    },
+    {
+      "id": "t5",
+      "title": "Send 5 cold emails to PE target list",
+      "goal": "pipeline",
+      "status": "today",
+      "priority": "high",
+      "dueDate": "2026-02-27",
+      "completed": false,
+      "completedAt": null
+    },
+    {
+      "id": "t6",
+      "title": "Connect prospectorlabs.io to GitHub Pages",
+      "goal": "revenue",
+      "status": "in-progress",
       "priority": "medium",
-      "dueDate": "2026-02-13",
-      "completed": true,
-      "completedAt": "2026-02-13T08:30:00Z"
+      "dueDate": "2026-02-26",
+      "completed": false,
+      "completedAt": null
     },
     {
-      "id": "5",
-      "title": "Morning workout - Push day",
-      "goal": "body",
-      "status": "today",
-      "priority": "high",
-      "dueDate": "2026-02-13",
-      "completed": true,
-      "completedAt": "2026-02-13T07:00:00Z"
-    },
-    {
-      "id": "6",
-      "title": "Landing pages + funnel design",
-      "goal": "business",
+      "id": "t7",
+      "title": "Fix 4 broken dashboards (embed data or point to Fly.io API)",
+      "goal": "revenue",
       "status": "backlog",
       "priority": "medium",
-      "dueDate": "2026-02-15",
+      "dueDate": "2026-02-28",
       "completed": false,
       "completedAt": null
     },
     {
-      "id": "7",
-      "title": "Posts on Twitter + LinkedIn",
-      "goal": "business",
+      "id": "t8",
+      "title": "Financial audit — income, expenses, runway, burn rate",
+      "goal": "revenue",
+      "status": "backlog",
+      "priority": "medium",
+      "dueDate": "2026-03-01",
+      "completed": false,
+      "completedAt": null
+    },
+    {
+      "id": "t9",
+      "title": "Post Critical Minerals Tracker on LinkedIn",
+      "goal": "content",
+      "status": "backlog",
+      "priority": "medium",
+      "dueDate": "2026-03-04",
+      "completed": false,
+      "completedAt": null
+    },
+    {
+      "id": "t10",
+      "title": "Draft first Twitter thread (queue data analysis)",
+      "goal": "content",
       "status": "backlog",
       "priority": "low",
-      "dueDate": "2026-02-14",
+      "dueDate": "2026-03-05",
       "completed": false,
       "completedAt": null
     },
     {
-      "id": "8",
-      "title": "Review weekly metrics",
-      "goal": "business",
+      "id": "done1",
+      "title": "Named avoidance-shame spiral pattern",
+      "goal": "revenue",
+      "status": "done",
+      "priority": "high",
+      "dueDate": "2026-02-25",
+      "completed": true,
+      "completedAt": "2026-02-25T17:00:00Z"
+    },
+    {
+      "id": "done2",
+      "title": "Cleared all pending texts",
+      "goal": "pipeline",
+      "status": "done",
+      "priority": "high",
+      "dueDate": "2026-02-25",
+      "completed": true,
+      "completedAt": "2026-02-25T20:00:00Z"
+    },
+    {
+      "id": "done3",
+      "title": "Created OPEN-LOOPS.md system",
+      "goal": "revenue",
       "status": "done",
       "priority": "medium",
-      "dueDate": "2026-02-12",
+      "dueDate": "2026-02-25",
       "completed": true,
-      "completedAt": "2026-02-12T16:00:00Z"
+      "completedAt": "2026-02-25T20:15:00Z"
     },
     {
-      "id": "9",
-      "title": "Journaling session",
-      "goal": "mind",
-      "status": "done",
-      "priority": "low",
-      "dueDate": "2026-02-11",
-      "completed": true,
-      "completedAt": "2026-02-11T21:00:00Z"
-    },
-    {
-      "id": "10",
-      "title": "Leg day workout",
-      "goal": "body",
-      "status": "done",
-      "priority": "high",
-      "dueDate": "2026-02-12",
-      "completed": true,
-      "completedAt": "2026-02-12T07:30:00Z"
-    },
-    {
-      "id": "11",
-      "title": "Client call prep",
-      "goal": "business",
-      "status": "done",
-      "priority": "high",
-      "dueDate": "2026-02-10",
-      "completed": true,
-      "completedAt": "2026-02-10T14:00:00Z"
-    },
-    {
-      "id": "12",
-      "title": "Deep breathing exercises",
-      "goal": "mind",
+      "id": "done4",
+      "title": "Fixed 3 broken Sunday cron jobs",
+      "goal": "revenue",
       "status": "done",
       "priority": "medium",
-      "dueDate": "2026-02-10",
+      "dueDate": "2026-02-25",
       "completed": true,
-      "completedAt": "2026-02-10T08:00:00Z"
+      "completedAt": "2026-02-25T20:50:00Z"
     },
     {
-      "id": "task-1771005453574",
-      "title": "Test task from API",
-      "goal": "business",
+      "id": "done5",
+      "title": "Updated morning cron with open loops + avoidance check",
+      "goal": "revenue",
+      "status": "done",
+      "priority": "medium",
+      "dueDate": "2026-02-25",
+      "completed": true,
+      "completedAt": "2026-02-25T20:50:00Z"
+    },
+    {
+      "id": "done6",
+      "title": "Full system audit — all MD files, crons, dashboards",
+      "goal": "revenue",
+      "status": "done",
+      "priority": "medium",
+      "dueDate": "2026-02-25",
+      "completed": true,
+      "completedAt": "2026-02-25T21:00:00Z"
+    },
+    {
+      "id": "done7",
+      "title": "Soho House reflection — clarity on building vs selling",
+      "goal": "revenue",
+      "status": "done",
       "priority": "high",
-      "status": "today",
-      "dueDate": "2026-02-13",
-      "createdAt": "2026-02-13T17:57:33.574Z",
-      "updatedAt": "2026-02-13T17:57:33.574Z"
+      "dueDate": "2026-02-25",
+      "completed": true,
+      "completedAt": "2026-02-25T23:00:00Z"
     }
-  ],
-  "streak": 7
+  ]
 }
