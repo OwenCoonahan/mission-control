@@ -1,0 +1,115 @@
+{
+  "fiveYearVision": "I'm 29, living in a penthouse in Manhattan or Santa Monica. Net worth north of $10M. Prospector Labs generates $2M+ ARR — I have a team of 5-10 running it. I've spoken at major energy conferences. My name comes up when people talk about energy data. I'm in the best shape of my life — 210, lean, people ask me what I do. I'm in a relationship with someone incredible who matches my ambition. Mom would be proud. I call my brother every week, see my niece and nephew regularly. I travel when I want, where I want. I wake up excited, not anxious. The scarcity is gone — replaced by abundance in every dimension. I built this from nothing, in Brooklyn, with a Mac mini and a vision.\n\nThe Ferrari 458 is in the garage. Not because I need it — because I earned it.",
+  "pillars": [
+    {
+      "id": "business",
+      "title": "Business & Wealth",
+      "emoji": "💰",
+      "color": "emerald",
+      "oneYearVision": "Prospector Labs does $30K+/mo. I have 8-10 PE clients on retainer. The API has paying subscribers. I speak at one energy conference. My inbox has inbound leads weekly. I don't think about rent.",
+      "currentReality": {"mrr": "$0", "clients": "0", "pipeline": "4 warm leads", "runway": "26 months"},
+      "quarterlyGoal": {"title": "Close 1 paying client, $5K revenue", "deadline": "2026-03-31", "progress": 5, "reward": "Book a weekend trip somewhere you've been wanting to go", "punishment": "Donate $500 to a cause you don't support"},
+      "monthlyMilestones": [
+        {"title": "Reply to all 4 warm leads", "done": false},
+        {"title": "Send 20 cold emails (5/week)", "done": false},
+        {"title": "Book 3+ intro calls", "done": false},
+        {"title": "Send 1 free risk snapshot to a PE firm", "done": false},
+        {"title": "Close 1 paid engagement ($5K+)", "done": false},
+        {"title": "Post Developer Scorecard on LinkedIn", "done": false},
+        {"title": "Post Critical Minerals on LinkedIn", "done": false}
+      ],
+      "weeklyActions": ["Send 5 cold emails to PE target list", "Follow up on all open conversations (same day)", "Post 2x on LinkedIn (Tue + Thu)", "Post 1x on Twitter", "Check pipeline in Mission Control daily"]
+    },
+    {
+      "id": "body",
+      "title": "Body",
+      "emoji": "💪",
+      "color": "orange",
+      "oneYearVision": "210 lbs, lean muscle, visible abs, V-taper, clothes fit perfectly. People notice and ask what I do. I feel powerful, confident, and energized every single day.",
+      "currentReality": {"weight": "203 lbs", "bodyFat": "~15%", "training": "Daily in Brooklyn, inconsistent traveling"},
+      "quarterlyGoal": {"title": "205 lbs at 13% BF. Zero missed training days. Track macros daily.", "deadline": "2026-03-31", "progress": 30, "reward": "Buy one premium clothing item that fits the new physique", "punishment": "100 burpees on April 1st, filmed"},
+      "monthlyMilestones": [
+        {"title": "Set up macro tracking (3,200 cal, 210g protein)", "done": false},
+        {"title": "Find travel-friendly workout routine", "done": false},
+        {"title": "Train 6x/week minimum, even traveling", "done": false},
+        {"title": "Weekly progress photo", "done": false},
+        {"title": "Start creatine if not already", "done": false},
+        {"title": "Hit 205 lbs by month end", "done": false}
+      ],
+      "weeklyActions": ["Train 6 days (1 rest day)", "Track macros daily (210g+ protein)", "8+ hours sleep", "Weekly weigh-in (Friday AM, fasted)", "One progress photo per week"]
+    },
+    {
+      "id": "brand",
+      "title": "Personal Brand",
+      "emoji": "📢",
+      "color": "violet",
+      "oneYearVision": "I'm the 'cracked data guy' in energy. 15K+ LinkedIn, 5K+ Twitter. DMs from PE firms and journalists. Content drives inbound weekly. Featured in at least one publication.",
+      "currentReality": {"linkedin": "4,700", "twitter": "1,270", "postsPerWeek": "0", "contentReady": "12 weeks queued"},
+      "quarterlyGoal": {"title": "4x/week posting for 5 weeks. 5,500 LinkedIn, 1,500 Twitter.", "deadline": "2026-03-31", "progress": 0, "reward": "New camera/content setup", "punishment": "Write and post 'Why I Failed at Consistency' on LinkedIn"},
+      "monthlyMilestones": [
+        {"title": "Post Developer Scorecard (LinkedIn)", "done": false},
+        {"title": "Post Critical Minerals (LinkedIn)", "done": false},
+        {"title": "Post Supply Chain Risk (LinkedIn)", "done": false},
+        {"title": "Post queue data thread (Twitter)", "done": false},
+        {"title": "Engage on 10 LinkedIn posts/day", "done": false},
+        {"title": "Connect with 20 new people/week in energy", "done": false},
+        {"title": "Reach 5,500 LinkedIn, 1,500 Twitter", "done": false}
+      ],
+      "weeklyActions": ["2 LinkedIn posts (Tue + Thu)", "1 Twitter thread (Wed)", "1 punchy tweet (Fri)", "10 meaningful LinkedIn engagements/day", "5 new connection requests", "Reply to every DM within 24h"]
+    },
+    {
+      "id": "relationships",
+      "title": "Relationships",
+      "emoji": "❤️",
+      "color": "rose",
+      "oneYearVision": "In a relationship with someone incredible. Rich social life. Call brother weekly. Visit sister quarterly. Sexual confidence fully resolved. Fully present with people.",
+      "currentReality": {"romantic": "Single, avoids going deep", "social": "Many friends, not social enough lately", "family": "Close with Mitchell, need more contact with sister"},
+      "quarterlyGoal": {"title": "4+ dates in March. Call brother weekly. Start sexual confidence plan.", "deadline": "2026-03-31", "progress": 5, "reward": "Plan a trip to visit brother in Utah", "punishment": "Admit to Harry you've been avoiding dating"},
+      "monthlyMilestones": [
+        {"title": "Book bloodwork appointment", "done": false},
+        {"title": "Get Cialis Rx (telehealth)", "done": false},
+        {"title": "Go on 4 dates (1/week)", "done": false},
+        {"title": "Call Mitchell every Sunday", "done": false},
+        {"title": "Call sister 2x", "done": false},
+        {"title": "1 social event with friends", "done": false},
+        {"title": "Start 'Way of the Superior Man'", "done": false}
+      ],
+      "weeklyActions": ["1 date or social interaction with a girl", "Call Mitchell (Sunday)", "Text sister once", "1 social activity with friends", "Kegels + breathwork daily"]
+    },
+    {
+      "id": "mind",
+      "title": "Mind & Growth",
+      "emoji": "🧠",
+      "color": "sky",
+      "oneYearVision": "Calm, focused mind. Avoidance conquered. Read 2 books/month. Journal daily. Meditate daily. Deep energy knowledge. Scarcity mindset gone.",
+      "currentReality": {"avoidance": "Identified today, protocol set", "meditation": "Inconsistent", "reading": "Inconsistent"},
+      "quarterlyGoal": {"title": "30-day zero-open-loops streak. Meditate daily. Read 2 books.", "deadline": "2026-03-31", "progress": 3, "reward": "Buy one course or coaching session", "punishment": "No social media consumption for 1 week"},
+      "monthlyMilestones": [
+        {"title": "30-day streak: zero open loops at EOD", "done": false},
+        {"title": "Meditate every morning (5 min)", "done": false},
+        {"title": "Finish 'Way of the Superior Man'", "done": false},
+        {"title": "Read 1 energy industry book", "done": false},
+        {"title": "Journal daily (AM + PM)", "done": false},
+        {"title": "Complete 2 energy learning briefs", "done": false}
+      ],
+      "weeklyActions": ["Morning: brain dump + gratitudes + meditation", "Evening: reflection + tomorrow's FROG", "Read 30 min daily", "Clear all open loops before bed", "Reply to everything same day"]
+    },
+    {
+      "id": "financial",
+      "title": "Financial Foundation",
+      "emoji": "💵",
+      "color": "yellow",
+      "oneYearVision": "$200K+ saved beyond IRA. $30K/mo income. Expenses at $4K. Invest regularly. Never think about affording lunch.",
+      "currentReality": {"ira": "$130K", "burn": "$5K/mo", "income": "$0", "savings": "Minimal"},
+      "quarterlyGoal": {"title": "Reduce burn to $4K. Generate $5K revenue. Don't touch IRA.", "deadline": "2026-03-31", "progress": 10, "reward": "Open investment account, deposit first $1K", "punishment": "Strict $3K/mo budget for April"},
+      "monthlyMilestones": [
+        {"title": "Complete full financial audit", "done": false},
+        {"title": "Identify $500-1K in monthly cuts", "done": false},
+        {"title": "Set up budget tracking", "done": false},
+        {"title": "Generate $5K revenue", "done": false},
+        {"title": "Don't withdraw from IRA", "done": false}
+      ],
+      "weeklyActions": ["Track all spending daily (5 min)", "Review budget Sunday night"]
+    }
+  ]
+}

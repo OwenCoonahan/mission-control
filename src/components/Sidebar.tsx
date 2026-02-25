@@ -12,10 +12,12 @@ import {
   Calendar,
   Film,
   FolderKanban,
-  Handshake
+  Handshake,
+  Sparkles
 } from 'lucide-react'
 
 const navigation = [
+  { name: 'Vision', href: '/vision', icon: Sparkles },
   { name: 'Dashboard', href: '/', icon: LayoutDashboard },
   { name: 'Tasks', href: '/tasks', icon: CheckSquare },
   { name: 'Projects', href: '/projects', icon: FolderKanban },
