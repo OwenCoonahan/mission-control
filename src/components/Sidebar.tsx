@@ -7,23 +7,22 @@ import {
   LayoutDashboard,
   CheckSquare,
   Target,
-  Activity,
   Command,
   Brain,
   Calendar,
   Film,
   FolderKanban,
-  Users
+  Handshake
 } from 'lucide-react'
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: LayoutDashboard },
   { name: 'Tasks', href: '/tasks', icon: CheckSquare },
+  { name: 'Projects', href: '/projects', icon: FolderKanban },
+  { name: 'Pipeline', href: '/pipeline', icon: Handshake },
   { name: 'Content', href: '/content', icon: Film },
   { name: 'Calendar', href: '/calendar', icon: Calendar },
   { name: 'Memory', href: '/memory', icon: Brain },
-  { name: 'Projects', href: '/projects', icon: FolderKanban },
-  { name: 'Team', href: '/team', icon: Users },
   { name: 'Goals', href: '/goals', icon: Target },
 ]
 

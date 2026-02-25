@@ -1,0 +1,8 @@
+{
+  "leads": [
+    {"id": "l1", "name": "Sharad Goenka", "company": "Mazama Energy", "role": "PE", "status": "unreplied", "source": "LinkedIn inbound", "lastContact": "2026-02-20", "nextAction": "Reply to LinkedIn message", "priority": "hot", "email": "sgoenka@mazamaenergy.com"},
+    {"id": "l2", "name": "Harshwardhan Wadikar", "company": "", "role": "Battery Storage / AI/ML", "status": "unreplied", "source": "LinkedIn", "lastContact": "2026-02-22", "nextAction": "Reply about permitting timing", "priority": "warm"},
+    {"id": "l3", "name": "Kyle Campbell", "company": "", "role": "Commissioning Manager", "status": "unreplied", "source": "LinkedIn", "lastContact": "2026-02-23", "nextAction": "Follow up", "priority": "warm"},
+    {"id": "l4", "name": "Matt Warren", "company": "", "role": "Renewables Software", "status": "unreplied", "source": "LinkedIn", "lastContact": "2026-02-23", "nextAction": "Light follow up", "priority": "cool"}
+  ]
+}
