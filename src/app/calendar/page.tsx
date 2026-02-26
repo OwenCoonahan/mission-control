@@ -132,19 +132,20 @@ export default function CalendarPage() {
           <CardTitle className="text-zinc-200 text-sm font-medium">This Week</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-7 gap-2">
+          <div className="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0">
+            <div className="grid grid-cols-7 gap-2 min-w-[600px] md:min-w-0">
             {weekDates.map((date, i) => {
               const isToday = i === today
               const dayJobs = getJobsForDay(cronJobs, i)
               return (
-                <div key={i} className={`rounded-md p-2 min-h-[120px] ${isToday ? 'bg-zinc-800/60 border border-zinc-700' : 'bg-zinc-800/20'}`}>
+                <div key={i} className={`rounded-md p-2 min-h-[100px] md:min-h-[120px] ${isToday ? 'bg-zinc-800/60 border border-zinc-700' : 'bg-zinc-800/20'}`}>
                   <div className="text-center mb-2">
-                    <div className={`text-xs ${isToday ? 'text-violet-400' : 'text-zinc-600'}`}>{SHORT_DAYS[i]}</div>
-                    <div className={`text-base font-medium ${isToday ? 'text-white' : 'text-zinc-500'}`}>{date.getDate()}</div>
+                    <div className={`text-[10px] md:text-xs ${isToday ? 'text-violet-400' : 'text-zinc-600'}`}>{SHORT_DAYS[i]}</div>
+                    <div className={`text-sm md:text-base font-medium ${isToday ? 'text-white' : 'text-zinc-500'}`}>{date.getDate()}</div>
                   </div>
                   <div className="space-y-1">
                     {dayJobs.sort((a, b) => (a.schedule?.hour ?? 0) - (b.schedule?.hour ?? 0)).map(job => (
-                      <div key={job.id} className="bg-zinc-800/60 rounded px-1.5 py-1 text-[10px] text-zinc-400 truncate" title={job.name}>
+                      <div key={job.id} className="bg-zinc-800/60 rounded px-1 md:px-1.5 py-1 text-[9px] md:text-[10px] text-zinc-400 truncate" title={job.name}>
                         {job.schedule?.hour !== null && job.schedule?.minute !== null && (
                           <span className="text-zinc-600">{formatTime(job.schedule!.hour!, job.schedule!.minute!).split(' ')[0]} </span>
                         )}
@@ -155,6 +156,7 @@ export default function CalendarPage() {
                 </div>
               )
             })}
+          </div>
           </div>
         </CardContent>
       </Card>

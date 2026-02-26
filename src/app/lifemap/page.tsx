@@ -160,7 +160,7 @@ export default function LifeMapPage() {
       </Card>
 
       {/* Progress Overview */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
+      <div className="grid grid-cols-2 gap-3 mb-8">
         {data.goals.map(goal => {
           const progress = getGoalProgress(goal)
           return (

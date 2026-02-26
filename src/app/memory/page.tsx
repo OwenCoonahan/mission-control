@@ -115,8 +115,8 @@ export default function MemoryPage() {
         <p className="text-sm text-zinc-500 mt-1">Daily journals and long-term memory</p>
       </div>
 
-      <div className="flex gap-6 h-[calc(100vh-180px)]">
-        <div className="w-72 flex-shrink-0 flex flex-col">
+      <div className="flex flex-col md:flex-row gap-6 md:h-[calc(100vh-180px)]">
+        <div className="w-full md:w-72 flex-shrink-0 flex flex-col max-h-[50vh] md:max-h-none">
           <div className="relative mb-4">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-zinc-600" />
             <Input

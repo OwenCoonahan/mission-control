@@ -162,7 +162,7 @@ export default function ContentPage() {
         </Dialog>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {COLUMNS.map(col => (
           <div key={col.id} className="flex flex-col">
             <div className="flex items-center justify-between mb-3">
