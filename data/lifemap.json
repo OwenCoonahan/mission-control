@@ -1,0 +1,241 @@
+{
+  "vision": {
+    "identity": "I am a builder. I take complex problems in the physical world — energy, infrastructure, supply chains — and make them legible through data. I charge what I'm worth because the work matters. I move with calm confidence and full speed.",
+    "lifestyle": [
+      "Wake up at 5am with energy, not anxiety",
+      "$30K+/mo — retainers, API revenue, project fees",
+      "Greek God physique, daily training is religion",
+      "In a relationship with someone I respect and who respects me",
+      "Connected to family — Mitchell, half-sister, dad",
+      "Known in the energy data space — people come to ME",
+      "No invisible weight. Inbox zero. On top of everything."
+    ],
+    "feeling": "Grounded. Abundant. Clear. Like I earned every bit of it and I'm just getting started."
+  },
+  "goals": [
+    {
+      "id": "financial",
+      "title": "Financial Freedom Through Prospector Labs",
+      "emoji": "💰",
+      "target": "$10K/mo by June 30 → $30K/mo by Dec 2026",
+      "doneDef": "3+ paying clients, predictable monthly revenue, inbound lead system",
+      "color": "emerald",
+      "phases": [
+        {
+          "id": "fin-p1",
+          "name": "First Dollar",
+          "timeline": "NOW → March 31",
+          "milestone": "$5K in revenue from 1-2 paying clients",
+          "actions": [
+            { "id": "fin-1", "text": "Reply to Sharad Goenka — book discovery call", "done": false },
+            { "id": "fin-2", "text": "Reply to Harshwardhan Wadikar — explore battery storage angle", "done": false },
+            { "id": "fin-3", "text": "Send 10 cold emails to PE firms (LS Power, ECP, ArcLight, Stonepeak, Bernhard)", "done": false },
+            { "id": "fin-4", "text": "Run 1 free DD report as sample for warm lead", "done": false },
+            { "id": "fin-5", "text": "Define exact deliverable: scope, timeline, price ($4-5K/report)", "done": false },
+            { "id": "fin-6", "text": "Create 1-page PDF service menu (DD report, retainer, API access)", "done": false },
+            { "id": "fin-7", "text": "Book 5 discovery calls with PE/infrastructure firms", "done": false },
+            { "id": "fin-8", "text": "Close 1 paid engagement ($4-5K)", "done": false },
+            { "id": "fin-9", "text": "Set up invoicing (Stripe or PayPal)", "done": false }
+          ]
+        },
+        {
+          "id": "fin-p2",
+          "name": "Validate & Repeat",
+          "timeline": "April",
+          "milestone": "3 paying clients, $10K/mo run rate",
+          "actions": [
+            { "id": "fin-10", "text": "Deliver first report — get feedback, iterate", "done": false },
+            { "id": "fin-11", "text": "Ask for referrals from first client", "done": false },
+            { "id": "fin-12", "text": "Launch Developer Scorecard with email gate", "done": false },
+            { "id": "fin-13", "text": "Post 1 LinkedIn article/week showcasing data insights", "done": false },
+            { "id": "fin-14", "text": "Send 20 more targeted outreach emails", "done": false },
+            { "id": "fin-15", "text": "Build case study from first engagement", "done": false },
+            { "id": "fin-16", "text": "Raise price to $6-8K/report", "done": false },
+            { "id": "fin-17", "text": "Sign 2 more clients", "done": false }
+          ]
+        },
+        {
+          "id": "fin-p3",
+          "name": "System & Scale",
+          "timeline": "May — June",
+          "milestone": "$10K/mo recurring, inbound > outbound",
+          "actions": [
+            { "id": "fin-18", "text": "Productize DD report — templated, faster to produce", "done": false },
+            { "id": "fin-19", "text": "Launch Prospector Labs API paid tier", "done": false },
+            { "id": "fin-20", "text": "Hire VA or part-time analyst for data cleaning", "done": false },
+            { "id": "fin-21", "text": "Build 'Prospector Labs Weekly' email newsletter", "done": false },
+            { "id": "fin-22", "text": "Speak at 1 energy/infrastructure event or podcast", "done": false },
+            { "id": "fin-23", "text": "5+ clients on retainer", "done": false }
+          ]
+        },
+        {
+          "id": "fin-p4",
+          "name": "Abundance",
+          "timeline": "July — December",
+          "milestone": "$30K/mo, multiple revenue streams",
+          "actions": [
+            { "id": "fin-24", "text": "API revenue supplementing consulting", "done": false },
+            { "id": "fin-25", "text": "10+ clients across PE, developers, utilities", "done": false },
+            { "id": "fin-26", "text": "Considering first full-time hire", "done": false },
+            { "id": "fin-27", "text": "Personal brand driving 50%+ of leads", "done": false },
+            { "id": "fin-28", "text": "Exploring adjacent data verticals", "done": false }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "physical",
+      "title": "Elite Physical Health",
+      "emoji": "💪",
+      "target": "Greek God physique by Aug 2026, Hyrox #2 by June",
+      "doneDef": "Visible abs, 210-215 lbs lean, 6-day training split, bloodwork optimized",
+      "color": "orange",
+      "phases": [
+        {
+          "id": "phy-p1",
+          "name": "Foundation Reset",
+          "timeline": "NOW → March 31",
+          "milestone": "Consistent 6-day split, nutrition dialed, bloodwork done",
+          "actions": [
+            { "id": "phy-1", "text": "Get bloodwork done (testosterone, thyroid, metabolic panel)", "done": false },
+            { "id": "phy-2", "text": "Lock in training split (PPL 2x or Upper/Lower/Hyrox)", "done": false },
+            { "id": "phy-3", "text": "Track macros for 2 weeks — establish baseline", "done": false },
+            { "id": "phy-4", "text": "Set protein target: 1g/lb bodyweight daily", "done": false },
+            { "id": "phy-5", "text": "Morning routine: breathwork → stretch → gym by 6:30am", "done": false },
+            { "id": "phy-6", "text": "Research Cialis Rx", "done": false },
+            { "id": "phy-7", "text": "Sign up for next Hyrox event (May/June)", "done": false }
+          ]
+        },
+        {
+          "id": "phy-p2",
+          "name": "Dial In",
+          "timeline": "April — May",
+          "milestone": "Visible progress, strength PRs, Hyrox training active",
+          "actions": [
+            { "id": "phy-8", "text": "Progressive overload — track all lifts weekly", "done": false },
+            { "id": "phy-9", "text": "Add 1 Hyrox-specific session/week", "done": false },
+            { "id": "phy-10", "text": "Sleep: 10:30pm-5:30am non-negotiable", "done": false },
+            { "id": "phy-11", "text": "Supplement stack optimized from bloodwork", "done": false },
+            { "id": "phy-12", "text": "Cut if needed — 500 cal deficit, protein high", "done": false }
+          ]
+        },
+        {
+          "id": "phy-p3",
+          "name": "Peak",
+          "timeline": "June — August",
+          "milestone": "Hyrox #2 completed, physique goal hit",
+          "actions": [
+            { "id": "phy-13", "text": "Complete Hyrox #2 with Mitchell — beat Vegas time", "done": false },
+            { "id": "phy-14", "text": "Document the transformation (photos)", "done": false },
+            { "id": "phy-15", "text": "Find sustainable maintenance routine", "done": false }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "relationships",
+      "title": "Deep Relationships & Confidence",
+      "emoji": "❤️",
+      "target": "Meaningful relationship by Sept 2026, family connected, sexually confident",
+      "doneDef": "Dating someone I'm excited about, calling family weekly, ED/PE anxiety resolved",
+      "color": "rose",
+      "phases": [
+        {
+          "id": "rel-p1",
+          "name": "Foundation",
+          "timeline": "NOW → March 31",
+          "milestone": "Bloodwork done, Cialis Rx, 1 honest conversation/day",
+          "actions": [
+            { "id": "rel-1", "text": "Get bloodwork done", "done": false },
+            { "id": "rel-2", "text": "Talk to doctor about Cialis", "done": false },
+            { "id": "rel-3", "text": "Start edging practice 3x/week", "done": false },
+            { "id": "rel-4", "text": "Read 'Way of the Superior Man' — 20 pages/day", "done": false },
+            { "id": "rel-5", "text": "Call Mitchell 1x/week", "done": false },
+            { "id": "rel-6", "text": "Call half-sister 2x/month", "done": false },
+            { "id": "rel-7", "text": "1 honest conversation/day", "done": false },
+            { "id": "rel-8", "text": "Stop performing success — be real with friends", "done": false }
+          ]
+        },
+        {
+          "id": "rel-p2",
+          "name": "Put Yourself Out There",
+          "timeline": "April — May",
+          "milestone": "Dating regularly, sexual confidence improving",
+          "actions": [
+            { "id": "rel-9", "text": "Go on 2+ dates/month", "done": false },
+            { "id": "rel-10", "text": "Practice kegels + breathwork during intimacy", "done": false },
+            { "id": "rel-11", "text": "Have the vulnerable conversation early with dates", "done": false },
+            { "id": "rel-12", "text": "Join 1 social activity/group in NYC", "done": false },
+            { "id": "rel-13", "text": "Reach out to 2 old friends/month", "done": false }
+          ]
+        },
+        {
+          "id": "rel-p3",
+          "name": "Depth",
+          "timeline": "June — September",
+          "milestone": "Dating someone consistently, family relationships strong",
+          "actions": [
+            { "id": "rel-14", "text": "Invest in someone — go deep", "done": false },
+            { "id": "rel-15", "text": "Visit family (Denver or Boston)", "done": false },
+            { "id": "rel-16", "text": "Build social life beyond work", "done": false }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mental",
+      "title": "Mental Operating System",
+      "emoji": "🧠",
+      "target": "Calm mind + full speed as DEFAULT state",
+      "doneDef": "Daily practices automatic, avoidance managed, no invisible weight",
+      "color": "violet",
+      "phases": [
+        {
+          "id": "men-p1",
+          "name": "Install the System",
+          "timeline": "NOW → March 31",
+          "milestone": "21-day morning + evening streak, inbox zero daily",
+          "actions": [
+            { "id": "men-1", "text": "Morning: breathwork (10min) → journal (5min) → gym → frog before 9am", "done": false },
+            { "id": "men-2", "text": "Evening: 5-min reflection → plan tomorrow → bed by 10:30", "done": false },
+            { "id": "men-3", "text": "2-minute sweep 3x/day (reply to every text/email/DM)", "done": false },
+            { "id": "men-4", "text": "Name avoidance pattern in real-time", "done": false },
+            { "id": "men-5", "text": "Weekly brain dump every Sunday → OPEN-LOOPS.md", "done": false },
+            { "id": "men-6", "text": "Mission Control check every morning — know top 3 tasks", "done": false }
+          ]
+        },
+        {
+          "id": "men-p2",
+          "name": "Automate",
+          "timeline": "April — May",
+          "milestone": "Practices feel like brushing teeth",
+          "actions": [
+            { "id": "men-7", "text": "Find journaling format that sticks (voice memo? 3 bullets?)", "done": false },
+            { "id": "men-8", "text": "Review and prune: what's working, what's not", "done": false },
+            { "id": "men-9", "text": "Meditate 15min/day (up from 10)", "done": false },
+            { "id": "men-10", "text": "Monthly life audit: living aligned with the vision?", "done": false }
+          ]
+        },
+        {
+          "id": "men-p3",
+          "name": "Mastery",
+          "timeline": "June+",
+          "milestone": "Other people notice the difference",
+          "actions": [
+            { "id": "men-11", "text": "Teach someone what you've learned", "done": false },
+            { "id": "men-12", "text": "Stress fuels you instead of derailing you", "done": false },
+            { "id": "men-13", "text": "Vision feels like present tense, not future", "done": false }
+          ]
+        }
+      ]
+    }
+  ],
+  "levers": [
+    { "name": "Outreach System", "feeds": ["Financial"], "state": "Not started — 0 emails sent" },
+    { "name": "Content Engine", "feeds": ["Financial", "Brand"], "state": "12 weeks queued, 0 posted" },
+    { "name": "Morning Routine", "feeds": ["Mental", "Physical"], "state": "Inconsistent" },
+    { "name": "Mission Control", "feeds": ["All"], "state": "v3 built, needs daily use" },
+    { "name": "Avoidance Protocol", "feeds": ["All"], "state": "Identified, needs practice" },
+    { "name": "Social Calendar", "feeds": ["Relationships"], "state": "Nonexistent" }
+  ]
+}
