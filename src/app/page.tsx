@@ -5,14 +5,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { Badge } from '@/components/ui/badge'
 import {
-  Star,
   Target,
   AlertTriangle,
   Handshake,
-  Zap,
   CheckSquare,
   Clock,
-  Mail
 } from 'lucide-react'
 
 interface Task {
@@ -62,22 +59,11 @@ function getTimeOfDayGreeting() {
 }
 
 function formatDate(date: Date) {
-  return date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
-}
-
-function formatTime(date: Date) {
-  return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })
+  return date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })
 }
 
 function daysSince(dateStr: string) {
   return Math.floor((Date.now() - new Date(dateStr).getTime()) / (1000 * 60 * 60 * 24))
-}
-
-const PRIORITY_COLORS: Record<string, string> = {
-  hot: 'bg-red-500/20 text-red-400',
-  warm: 'bg-orange-500/20 text-orange-400',
-  cool: 'bg-blue-500/20 text-blue-400',
-  closed: 'bg-green-500/20 text-green-400',
 }
 
 export default function Dashboard() {
@@ -86,12 +72,6 @@ export default function Dashboard() {
   const [leads, setLeads] = useState<Lead[]>([])
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
-  const [currentTime, setCurrentTime] = useState(new Date())
-
-  useEffect(() => {
-    const timer = setInterval(() => setCurrentTime(new Date()), 1000)
-    return () => clearInterval(timer)
-  }, [])
 
   useEffect(() => {
     async function fetchData() {
@@ -122,10 +102,10 @@ export default function Dashboard() {
     return (
       <div className="p-8">
         <div className="animate-pulse">
-          <div className="h-8 bg-zinc-700 rounded w-64 mb-4"></div>
+          <div className="h-8 bg-zinc-800 rounded w-64 mb-4"></div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="h-48 bg-zinc-800 rounded-lg"></div>
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="h-48 bg-zinc-900 rounded-lg"></div>
             ))}
           </div>
         </div>
@@ -142,75 +122,59 @@ export default function Dashboard() {
     })
     .slice(0, 5)
 
-  const quickWins = tasks.filter(t =>
-    !t.completed &&
-    (t.title.toLowerCase().includes('reply') ||
-     t.title.toLowerCase().includes('follow up') ||
-     t.title.toLowerCase().includes('clear') ||
-     t.title.toLowerCase().includes('send'))
-  ).slice(0, 4)
-
   const allBlockers = projects.flatMap(p =>
-    (p.blockers || []).map(b => ({ project: p.emoji + ' ' + p.title, text: b }))
+    (p.blockers || []).map(b => ({ project: p.title, text: b }))
   ).filter(b => b.text.length > 0)
 
   return (
-    <div className="min-h-screen bg-zinc-950 p-4 md:p-8">
+    <div className="min-h-screen bg-zinc-950 p-6 md:p-10">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-white mb-1">{getTimeOfDayGreeting()}, Owen</h1>
-        <div className="text-zinc-400 flex items-center gap-4">
-          <span>{formatDate(currentTime)}</span>
-          <span className="text-violet-400 font-mono">{formatTime(currentTime)}</span>
-        </div>
+      <div className="mb-10">
+        <h1 className="text-2xl font-semibold text-white">{getTimeOfDayGreeting()}, Owen</h1>
+        <p className="text-sm text-zinc-500 mt-1">{formatDate(new Date())}</p>
       </div>
 
       {/* FROG */}
       {frogTask && (
-        <Card className="mb-6 bg-gradient-to-r from-violet-900/20 to-violet-800/20 border-violet-700">
-          <CardHeader className="pb-2">
+        <Card className="mb-8 bg-zinc-900 border-zinc-800">
+          <CardContent className="py-5">
             <div className="flex items-center gap-3">
-              <Star className="h-6 w-6 text-violet-400" />
+              <div className="w-1.5 h-10 bg-violet-500 rounded-full" />
               <div>
-                <CardTitle className="text-violet-100">Today&apos;s FROG</CardTitle>
+                <p className="text-xs font-medium text-zinc-500 uppercase tracking-wide mb-1">Today&apos;s Focus</p>
+                <p className="text-base font-medium text-white">{frogTask.title}</p>
               </div>
             </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-lg font-medium text-white">{frogTask.title}</div>
-            <Badge className="mt-2 bg-violet-600 hover:bg-violet-700">{frogTask.goal}</Badge>
           </CardContent>
         </Card>
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* This Week's Sprint */}
+        {/* Sprint */}
         <Card className="bg-zinc-900 border-zinc-800">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-white text-base">
-              <CheckSquare className="h-5 w-5 text-violet-400" />
-              This Week&apos;s Sprint
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2 text-zinc-200 text-sm font-medium">
+              <CheckSquare className="h-4 w-4 text-zinc-500" />
+              This Week
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-3">
+            <div className="space-y-2">
               {sprintTasks.map((task, i) => (
-                <div key={task.id} className="flex items-center gap-3 p-2 rounded-lg bg-zinc-800/50">
-                  <span className="text-xs font-mono text-zinc-500 w-5">{i + 1}.</span>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm text-white truncate">{task.title}</p>
-                  </div>
-                  <Badge variant="secondary" className={`text-[10px] ${
-                    task.priority === 'frog' ? 'bg-violet-500/20 text-violet-400' :
-                    task.priority === 'high' ? 'bg-red-500/20 text-red-400' :
-                    'bg-zinc-700 text-zinc-400'
+                <div key={task.id} className="flex items-center gap-3 py-2 px-3 rounded-md bg-zinc-800/40">
+                  <span className="text-xs text-zinc-600 w-4">{i + 1}</span>
+                  <p className="text-sm text-zinc-200 flex-1 truncate">{task.title}</p>
+                  <span className={`text-[11px] px-1.5 py-0.5 rounded ${
+                    task.priority === 'frog' ? 'bg-violet-500/15 text-violet-400' :
+                    task.priority === 'high' ? 'bg-red-500/15 text-red-400' :
+                    'text-zinc-500'
                   }`}>
                     {task.priority}
-                  </Badge>
+                  </span>
                 </div>
               ))}
               {sprintTasks.length === 0 && (
-                <p className="text-sm text-zinc-500">No active sprint tasks</p>
+                <p className="text-sm text-zinc-600 py-4">No active tasks</p>
               )}
             </div>
           </CardContent>
@@ -218,31 +182,35 @@ export default function Dashboard() {
 
         {/* Pipeline */}
         <Card className="bg-zinc-900 border-zinc-800">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-white text-base">
-              <Handshake className="h-5 w-5 text-violet-400" />
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2 text-zinc-200 text-sm font-medium">
+              <Handshake className="h-4 w-4 text-zinc-500" />
               Pipeline
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-3">
+            <div className="space-y-2">
               {leads.map(lead => (
-                <div key={lead.id} className="flex items-center gap-3 p-2 rounded-lg bg-zinc-800/50">
-                  <Badge className={`${PRIORITY_COLORS[lead.priority]} text-[10px]`}>
+                <div key={lead.id} className="flex items-center gap-3 py-2 px-3 rounded-md bg-zinc-800/40">
+                  <span className={`text-[11px] px-1.5 py-0.5 rounded ${
+                    lead.priority === 'hot' ? 'bg-red-500/15 text-red-400' :
+                    lead.priority === 'warm' ? 'bg-orange-500/15 text-orange-400' :
+                    'bg-zinc-800 text-zinc-500'
+                  }`}>
                     {lead.priority}
-                  </Badge>
+                  </span>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm text-white truncate">{lead.name}{lead.company ? ` · ${lead.company}` : ''}</p>
-                    <p className="text-xs text-zinc-500 truncate">{lead.nextAction}</p>
+                    <p className="text-sm text-zinc-200 truncate">{lead.name}{lead.company ? ` · ${lead.company}` : ''}</p>
+                    <p className="text-xs text-zinc-600 truncate">{lead.nextAction}</p>
                   </div>
-                  <div className="flex items-center gap-1 text-xs text-zinc-500">
+                  <span className="text-xs text-zinc-600 flex items-center gap-1">
                     <Clock className="h-3 w-3" />
                     {daysSince(lead.lastContact)}d
-                  </div>
+                  </span>
                 </div>
               ))}
               {leads.length === 0 && (
-                <p className="text-sm text-zinc-500">No leads yet</p>
+                <p className="text-sm text-zinc-600 py-4">No leads yet</p>
               )}
             </div>
           </CardContent>
@@ -250,44 +218,22 @@ export default function Dashboard() {
 
         {/* Blockers */}
         {allBlockers.length > 0 && (
-          <Card className="bg-zinc-900 border-red-900/50">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-red-400 text-base">
-                <AlertTriangle className="h-5 w-5" />
+          <Card className="bg-zinc-900 border-zinc-800">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-zinc-200 text-sm font-medium">
+                <AlertTriangle className="h-4 w-4 text-red-400" />
                 Blockers
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
                 {allBlockers.map((b, i) => (
-                  <div key={i} className="flex items-start gap-3 p-2 rounded-lg bg-red-950/20">
-                    <div className="w-2 h-2 bg-red-500 rounded-full mt-1.5 flex-shrink-0" />
+                  <div key={i} className="flex items-start gap-3 py-2 px-3 rounded-md bg-zinc-800/40">
+                    <div className="w-1.5 h-1.5 bg-red-500 rounded-full mt-1.5 flex-shrink-0" />
                     <div>
-                      <p className="text-sm text-white">{b.text}</p>
-                      <p className="text-xs text-zinc-500">{b.project}</p>
+                      <p className="text-sm text-zinc-200">{b.text}</p>
+                      <p className="text-xs text-zinc-600">{b.project}</p>
                     </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Quick Wins */}
-        {quickWins.length > 0 && (
-          <Card className="bg-zinc-900 border-zinc-800">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-white text-base">
-                <Zap className="h-5 w-5 text-yellow-400" />
-                Quick Wins
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                {quickWins.map(task => (
-                  <div key={task.id} className="flex items-center gap-3 p-2 rounded-lg bg-zinc-800/50">
-                    <Mail className="h-4 w-4 text-zinc-500" />
-                    <p className="text-sm text-white truncate">{task.title}</p>
                   </div>
                 ))}
               </div>
@@ -298,23 +244,22 @@ export default function Dashboard() {
 
       {/* Goals Progress */}
       <Card className="mt-6 bg-zinc-900 border-zinc-800">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-white text-base">
-            <Target className="h-5 w-5 text-violet-400" />
-            Goals Progress
+        <CardHeader className="pb-3">
+          <CardTitle className="flex items-center gap-2 text-zinc-200 text-sm font-medium">
+            <Target className="h-4 w-4 text-zinc-500" />
+            Goals
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
+          <div className="space-y-5">
             {goals.map(goal => (
-              <div key={goal.id} className="flex items-center gap-4">
-                <span className="text-2xl">{goal.emoji}</span>
-                <div className="flex-1">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-white">{goal.title}</span>
-                    <span className="text-sm text-zinc-400">{goal.progress}%</span>
-                  </div>
-                  <Progress value={goal.progress} className="h-2 bg-zinc-700" />
+              <div key={goal.id}>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm text-zinc-200">{goal.title}</span>
+                  <span className="text-xs text-zinc-500">{goal.progress}%</span>
+                </div>
+                <div className="h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+                  <div className="h-full bg-emerald-500 rounded-full transition-all" style={{ width: `${goal.progress}%` }} />
                 </div>
               </div>
             ))}

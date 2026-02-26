@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Handshake, Mail, Clock } from 'lucide-react'
+import { Mail, Clock } from 'lucide-react'
 
 interface Lead {
   id: string
@@ -18,17 +17,8 @@ interface Lead {
   email?: string
 }
 
-const PRIORITY_COLORS: Record<string, string> = {
-  hot: 'bg-red-500/20 text-red-400 border-red-500/30',
-  warm: 'bg-orange-500/20 text-orange-400 border-orange-500/30',
-  cool: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
-  closed: 'bg-green-500/20 text-green-400 border-green-500/30',
-}
-
 function daysSince(dateStr: string) {
-  const d = new Date(dateStr)
-  const now = new Date()
-  return Math.floor((now.getTime() - d.getTime()) / (1000 * 60 * 60 * 24))
+  return Math.floor((Date.now() - new Date(dateStr).getTime()) / (1000 * 60 * 60 * 24))
 }
 
 export default function PipelinePage() {
@@ -45,10 +35,10 @@ export default function PipelinePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-zinc-950 p-4 md:p-8">
+      <div className="min-h-screen bg-zinc-950 p-6 md:p-10">
         <div className="animate-pulse">
-          <div className="h-8 bg-zinc-700 rounded w-48 mb-8"></div>
-          <div className="h-64 bg-zinc-800 rounded-xl"></div>
+          <div className="h-8 bg-zinc-800 rounded w-48 mb-8"></div>
+          <div className="h-64 bg-zinc-900 rounded-lg"></div>
         </div>
       </div>
     )
@@ -59,95 +49,77 @@ export default function PipelinePage() {
   const coolLeads = leads.filter(l => l.priority === 'cool')
 
   return (
-    <div className="min-h-screen bg-zinc-950 p-4 md:p-8">
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-white mb-2 flex items-center gap-3">
-          <Handshake className="h-8 w-8 text-violet-400" />
-          Pipeline
-        </h1>
-        <p className="text-zinc-400">Track warm leads and outreach</p>
+    <div className="min-h-screen bg-zinc-950 p-6 md:p-10">
+      <div className="mb-10">
+        <h1 className="text-2xl font-semibold text-white">Pipeline</h1>
+        <p className="text-sm text-zinc-500 mt-1">Track warm leads and outreach</p>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <Card className="bg-zinc-900 border-zinc-800">
-          <CardContent className="p-4">
-            <div className="text-2xl font-bold text-white">{leads.length}</div>
-            <div className="text-xs text-zinc-400">Total Leads</div>
-          </CardContent>
-        </Card>
-        <Card className="bg-zinc-900 border-zinc-800">
-          <CardContent className="p-4">
-            <div className="text-2xl font-bold text-red-400">{hotLeads.length}</div>
-            <div className="text-xs text-zinc-400">Hot</div>
-          </CardContent>
-        </Card>
-        <Card className="bg-zinc-900 border-zinc-800">
-          <CardContent className="p-4">
-            <div className="text-2xl font-bold text-orange-400">{warmLeads.length}</div>
-            <div className="text-xs text-zinc-400">Warm</div>
-          </CardContent>
-        </Card>
-        <Card className="bg-zinc-900 border-zinc-800">
-          <CardContent className="p-4">
-            <div className="text-2xl font-bold text-blue-400">{coolLeads.length}</div>
-            <div className="text-xs text-zinc-400">Cool</div>
-          </CardContent>
-        </Card>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
+        {[
+          { label: 'Total', value: leads.length, color: 'text-white' },
+          { label: 'Hot', value: hotLeads.length, color: 'text-red-400' },
+          { label: 'Warm', value: warmLeads.length, color: 'text-orange-400' },
+          { label: 'Cool', value: coolLeads.length, color: 'text-zinc-400' },
+        ].map(stat => (
+          <Card key={stat.label} className="bg-zinc-900 border-zinc-800">
+            <CardContent className="p-4">
+              <div className={`text-xl font-semibold ${stat.color}`}>{stat.value}</div>
+              <div className="text-xs text-zinc-500">{stat.label}</div>
+            </CardContent>
+          </Card>
+        ))}
       </div>
 
-      {/* Leads Table */}
       <Card className="bg-zinc-900 border-zinc-800">
-        <CardHeader>
-          <CardTitle className="text-white">All Leads</CardTitle>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-zinc-200 text-sm font-medium">All Leads</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
                 <tr className="border-b border-zinc-800">
-                  <th className="text-left text-xs font-medium text-zinc-400 pb-3 pr-4">Name</th>
-                  <th className="text-left text-xs font-medium text-zinc-400 pb-3 pr-4">Role / Company</th>
-                  <th className="text-left text-xs font-medium text-zinc-400 pb-3 pr-4">Priority</th>
-                  <th className="text-left text-xs font-medium text-zinc-400 pb-3 pr-4">Source</th>
-                  <th className="text-left text-xs font-medium text-zinc-400 pb-3 pr-4">Days Ago</th>
-                  <th className="text-left text-xs font-medium text-zinc-400 pb-3">Next Action</th>
+                  <th className="text-left text-xs font-medium text-zinc-500 pb-3 pr-4">Name</th>
+                  <th className="text-left text-xs font-medium text-zinc-500 pb-3 pr-4">Role / Company</th>
+                  <th className="text-left text-xs font-medium text-zinc-500 pb-3 pr-4">Priority</th>
+                  <th className="text-left text-xs font-medium text-zinc-500 pb-3 pr-4">Source</th>
+                  <th className="text-left text-xs font-medium text-zinc-500 pb-3 pr-4">Last Contact</th>
+                  <th className="text-left text-xs font-medium text-zinc-500 pb-3">Next Action</th>
                 </tr>
               </thead>
               <tbody>
                 {leads.map(lead => (
-                  <tr key={lead.id} className="border-b border-zinc-800/50 hover:bg-zinc-800/30">
+                  <tr key={lead.id} className="border-b border-zinc-800/50 hover:bg-zinc-800/20">
                     <td className="py-3 pr-4">
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-medium text-white">{lead.name}</span>
+                        <span className="text-sm text-zinc-200">{lead.name}</span>
                         {lead.email && (
-                          <a href={`mailto:${lead.email}`} className="text-zinc-500 hover:text-violet-400">
-                            <Mail className="h-3.5 w-3.5" />
+                          <a href={`mailto:${lead.email}`} className="text-zinc-600 hover:text-violet-400">
+                            <Mail className="h-3 w-3" />
                           </a>
                         )}
                       </div>
                     </td>
                     <td className="py-3 pr-4">
-                      <span className="text-sm text-zinc-300">{lead.role}</span>
-                      {lead.company && (
-                        <span className="text-sm text-zinc-500"> · {lead.company}</span>
-                      )}
+                      <span className="text-sm text-zinc-400">{lead.role}</span>
+                      {lead.company && <span className="text-sm text-zinc-600"> · {lead.company}</span>}
                     </td>
                     <td className="py-3 pr-4">
-                      <Badge className={PRIORITY_COLORS[lead.priority]}>
-                        {lead.priority}
-                      </Badge>
+                      <span className={`text-[11px] px-1.5 py-0.5 rounded ${
+                        lead.priority === 'hot' ? 'bg-red-500/10 text-red-400' :
+                        lead.priority === 'warm' ? 'bg-orange-500/10 text-orange-400' :
+                        lead.priority === 'closed' ? 'bg-emerald-500/10 text-emerald-400' :
+                        'bg-zinc-800 text-zinc-500'
+                      }`}>{lead.priority}</span>
                     </td>
-                    <td className="py-3 pr-4 text-sm text-zinc-400">{lead.source}</td>
+                    <td className="py-3 pr-4 text-sm text-zinc-500">{lead.source}</td>
                     <td className="py-3 pr-4">
-                      <div className="flex items-center gap-1.5">
-                        <Clock className="h-3.5 w-3.5 text-zinc-500" />
-                        <span className={`text-sm ${daysSince(lead.lastContact) > 3 ? 'text-red-400' : 'text-zinc-400'}`}>
-                          {daysSince(lead.lastContact)}d
-                        </span>
-                      </div>
+                      <span className={`text-sm flex items-center gap-1 ${daysSince(lead.lastContact) > 3 ? 'text-red-400' : 'text-zinc-500'}`}>
+                        <Clock className="h-3 w-3" /> {daysSince(lead.lastContact)}d ago
+                      </span>
                     </td>
-                    <td className="py-3 text-sm text-zinc-300">{lead.nextAction}</td>
+                    <td className="py-3 text-sm text-zinc-400">{lead.nextAction}</td>
                   </tr>
                 ))}
               </tbody>

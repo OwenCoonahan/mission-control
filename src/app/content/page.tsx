@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import { Film, Plus, Trash2, Twitter, Linkedin } from 'lucide-react'
+import { Plus, Trash2 } from 'lucide-react'
 
 interface ContentItem {
   id: string
@@ -19,39 +19,23 @@ interface ContentItem {
   hook: string
   tool: string | null
   createdAt: string
-  // Legacy fields
   description?: string
   status?: string
 }
 
 const COLUMNS = [
-  { id: 'ideas', title: '💡 Ideas', color: 'border-yellow-500/30', headerBg: 'bg-yellow-500/10', headerText: 'text-yellow-400' },
-  { id: 'scripting', title: '✍️ Scripting', color: 'border-blue-500/30', headerBg: 'bg-blue-500/10', headerText: 'text-blue-400' },
-  { id: 'ready', title: '✅ Ready', color: 'border-purple-500/30', headerBg: 'bg-purple-500/10', headerText: 'text-purple-400' },
-  { id: 'posting', title: '📤 Posting', color: 'border-orange-500/30', headerBg: 'bg-orange-500/10', headerText: 'text-orange-400' },
-  { id: 'published', title: '🚀 Published', color: 'border-green-500/30', headerBg: 'bg-green-500/10', headerText: 'text-green-400' },
+  { id: 'ideas', title: 'Ideas' },
+  { id: 'scripting', title: 'Scripting' },
+  { id: 'ready', title: 'Ready' },
+  { id: 'posting', title: 'Posting' },
+  { id: 'published', title: 'Published' },
 ] as const
-
-const PLATFORM_ICONS: Record<string, typeof Linkedin> = {
-  twitter: Twitter,
-  linkedin: Linkedin,
-}
-
-const PLATFORM_COLORS: Record<string, string> = {
-  twitter: 'bg-blue-400/20 text-blue-400',
-  linkedin: 'bg-blue-600/20 text-blue-300',
-}
 
 export default function ContentPage() {
   const [items, setItems] = useState<ContentItem[]>([])
   const [loading, setLoading] = useState(true)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [newItem, setNewItem] = useState({
-    title: '',
-    hook: '',
-    platform: 'linkedin',
-    stage: 'ideas',
-  })
+  const [newItem, setNewItem] = useState({ title: '', hook: '', platform: 'linkedin', stage: 'ideas' })
 
   useEffect(() => { fetchContent() }, [])
 
@@ -59,7 +43,6 @@ export default function ContentPage() {
     try {
       const res = await fetch('/api/content')
       const data = await res.json()
-      // Normalize: map status->stage for legacy items
       const normalized = (data.items || []).map((item: ContentItem) => ({
         ...item,
         stage: item.stage || item.status || 'ideas',
@@ -119,12 +102,12 @@ export default function ContentPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-zinc-950 p-4 md:p-8">
+      <div className="min-h-screen bg-zinc-950 p-6 md:p-10">
         <div className="animate-pulse">
-          <div className="h-8 bg-zinc-700 rounded w-48 mb-8"></div>
+          <div className="h-8 bg-zinc-800 rounded w-48 mb-8"></div>
           <div className="grid grid-cols-5 gap-4">
             {[...Array(5)].map((_, i) => (
-              <div key={i} className="h-64 bg-zinc-800 rounded-xl"></div>
+              <div key={i} className="h-48 bg-zinc-900 rounded-lg"></div>
             ))}
           </div>
         </div>
@@ -133,53 +116,37 @@ export default function ContentPage() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 p-4 md:p-8">
-      <div className="flex items-center justify-between mb-6">
+    <div className="min-h-screen bg-zinc-950 p-6 md:p-10">
+      <div className="flex items-center justify-between mb-10">
         <div>
-          <h1 className="text-3xl font-bold text-white mb-2 flex items-center gap-3">
-            <Film className="h-8 w-8 text-violet-400" />
-            Content Pipeline
-          </h1>
-          <p className="text-zinc-400">Track content from idea to published</p>
+          <h1 className="text-2xl font-semibold text-white">Content</h1>
+          <p className="text-sm text-zinc-500 mt-1">Track content from idea to published</p>
         </div>
 
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-violet-600 hover:bg-violet-700">
-              <Plus className="h-4 w-4 mr-2" />
-              Add Content
+            <Button className="bg-violet-600 hover:bg-violet-700 h-8 text-xs">
+              <Plus className="h-3.5 w-3.5 mr-1.5" /> Add Content
             </Button>
           </DialogTrigger>
-          <DialogContent className="bg-zinc-900 border-zinc-700">
+          <DialogContent className="bg-zinc-900 border-zinc-800">
             <DialogHeader>
               <DialogTitle className="text-white">New Content</DialogTitle>
-              <DialogDescription className="text-zinc-400">Add a new piece of content to the pipeline</DialogDescription>
+              <DialogDescription className="text-zinc-500">Add content to the pipeline</DialogDescription>
             </DialogHeader>
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label className="text-white">Title</Label>
-                <Input
-                  value={newItem.title}
-                  onChange={(e) => setNewItem({ ...newItem, title: e.target.value })}
-                  className="bg-zinc-800 border-zinc-700 text-white"
-                  placeholder="Content title..."
-                />
+                <Label className="text-zinc-300 text-xs">Title</Label>
+                <Input value={newItem.title} onChange={(e) => setNewItem({ ...newItem, title: e.target.value })} className="bg-zinc-800 border-zinc-700 text-white" placeholder="Content title..." />
               </div>
               <div className="space-y-2">
-                <Label className="text-white">Hook</Label>
-                <Textarea
-                  value={newItem.hook}
-                  onChange={(e) => setNewItem({ ...newItem, hook: e.target.value })}
-                  className="bg-zinc-800 border-zinc-700 text-white"
-                  placeholder="The hook or opening line..."
-                />
+                <Label className="text-zinc-300 text-xs">Hook</Label>
+                <Textarea value={newItem.hook} onChange={(e) => setNewItem({ ...newItem, hook: e.target.value })} className="bg-zinc-800 border-zinc-700 text-white" placeholder="Opening line..." />
               </div>
               <div className="space-y-2">
-                <Label className="text-white">Platform</Label>
+                <Label className="text-zinc-300 text-xs">Platform</Label>
                 <Select value={newItem.platform} onValueChange={(v) => setNewItem({ ...newItem, platform: v })}>
-                  <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
-                    <SelectValue />
-                  </SelectTrigger>
+                  <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white"><SelectValue /></SelectTrigger>
                   <SelectContent className="bg-zinc-800 border-zinc-700">
                     <SelectItem value="linkedin">LinkedIn</SelectItem>
                     <SelectItem value="twitter">Twitter</SelectItem>
@@ -187,79 +154,52 @@ export default function ContentPage() {
                 </Select>
               </div>
               <div className="flex justify-end gap-2">
-                <Button variant="outline" onClick={() => setIsDialogOpen(false)} className="border-zinc-600 text-zinc-300 hover:bg-zinc-800">Cancel</Button>
-                <Button onClick={createItem} className="bg-violet-600 hover:bg-violet-700">Create</Button>
+                <Button variant="outline" onClick={() => setIsDialogOpen(false)} className="border-zinc-700 text-zinc-400 hover:bg-zinc-800 h-8 text-xs">Cancel</Button>
+                <Button onClick={createItem} className="bg-violet-600 hover:bg-violet-700 h-8 text-xs">Create</Button>
               </div>
             </div>
           </DialogContent>
         </Dialog>
       </div>
 
-      {/* Kanban Board */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {COLUMNS.map(col => (
-          <Card key={col.id} className="bg-zinc-900 border-zinc-800 hover:border-zinc-700 transition-colors flex flex-col">
-            <div className={`flex items-center justify-between px-3 py-2.5 rounded-t-xl ${col.headerBg} border-b ${col.color}`}>
-              <h3 className={`text-sm font-semibold ${col.headerText}`}>{col.title}</h3>
-              <div className="flex items-center gap-1.5">
-                <Badge variant="secondary" className="bg-zinc-800/50 text-zinc-400 text-xs">
-                  {getColumnItems(col.id).length}
-                </Badge>
-                <button
-                  onClick={() => { setNewItem({ ...newItem, stage: col.id }); setIsDialogOpen(true) }}
-                  className="w-5 h-5 rounded flex items-center justify-center text-zinc-500 hover:text-white hover:bg-zinc-700 transition-colors"
-                >
-                  <Plus className="h-3.5 w-3.5" />
-                </button>
-              </div>
+          <div key={col.id} className="flex flex-col">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-sm font-medium text-zinc-400">{col.title}</h3>
+              <span className="text-xs text-zinc-600">{getColumnItems(col.id).length}</span>
             </div>
-            <div className="space-y-2 min-h-[200px] p-2 flex-1">
-              {getColumnItems(col.id).map(item => {
-                const PlatformIcon = PLATFORM_ICONS[item.platform] || Linkedin
-                return (
-                  <Card key={item.id} className="bg-zinc-800/50 border-zinc-700 hover:border-zinc-600 transition-colors">
-                    <CardContent className="p-3">
-                      <div className="flex items-start justify-between mb-2">
-                        <h4 className="text-sm font-medium text-white leading-tight">{item.title}</h4>
-                        <button onClick={() => deleteItem(item.id)} className="text-zinc-600 hover:text-red-400 transition-colors p-0.5">
-                          <Trash2 className="h-3 w-3" />
-                        </button>
-                      </div>
-                      {item.hook && (
-                        <p className="text-xs text-zinc-500 mb-2 line-clamp-2">{item.hook}</p>
-                      )}
-                      <div className="flex items-center gap-1.5 flex-wrap">
-                        <Badge className={`${PLATFORM_COLORS[item.platform] || 'bg-zinc-700 text-zinc-300'} text-[10px] px-1.5 py-0`}>
-                          <PlatformIcon className="h-2.5 w-2.5 mr-0.5" />
-                          {item.platform}
-                        </Badge>
-                        {item.tool && (
-                          <Badge variant="secondary" className="bg-zinc-700/50 text-zinc-400 text-[10px] px-1.5 py-0">
-                            {item.tool}
-                          </Badge>
-                        )}
-                      </div>
-                      <Select value={item.stage} onValueChange={(v) => updateStage(item.id, v)}>
-                        <SelectTrigger className="w-full h-6 bg-zinc-700/50 border-zinc-600 text-[10px] mt-2">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent className="bg-zinc-800 border-zinc-700">
-                          {COLUMNS.map(c => (
-                            <SelectItem key={c.id} value={c.id}>{c.title}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </CardContent>
-                  </Card>
-                )
-              })}
+            <div className="space-y-2 min-h-[200px]">
+              {getColumnItems(col.id).map(item => (
+                <Card key={item.id} className="bg-zinc-900 border-zinc-800 hover:border-zinc-700 transition-colors">
+                  <CardContent className="p-3">
+                    <div className="flex items-start justify-between mb-1.5">
+                      <h4 className="text-sm text-zinc-200 leading-tight">{item.title}</h4>
+                      <button onClick={() => deleteItem(item.id)} className="text-zinc-700 hover:text-red-400 transition-colors p-0.5">
+                        <Trash2 className="h-3 w-3" />
+                      </button>
+                    </div>
+                    {item.hook && <p className="text-xs text-zinc-600 mb-2 line-clamp-2">{item.hook}</p>}
+                    <div className="flex items-center gap-1.5 mb-2">
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400">{item.platform}</span>
+                      {item.tool && <span className="text-[10px] px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-500">{item.tool}</span>}
+                    </div>
+                    <Select value={item.stage} onValueChange={(v) => updateStage(item.id, v)}>
+                      <SelectTrigger className="w-full h-6 bg-zinc-800 border-zinc-700 text-[10px]"><SelectValue /></SelectTrigger>
+                      <SelectContent className="bg-zinc-900 border-zinc-800">
+                        {COLUMNS.map(c => (
+                          <SelectItem key={c.id} value={c.id}>{c.title}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </CardContent>
+                </Card>
+              ))}
               {getColumnItems(col.id).length === 0 && (
-                <div className="flex items-center justify-center h-24 text-zinc-600 text-xs text-center px-2">
-                  No items yet
-                </div>
+                <div className="flex items-center justify-center h-24 text-zinc-700 text-xs">No items</div>
               )}
             </div>
-          </Card>
+          </div>
         ))}
       </div>
     </div>
